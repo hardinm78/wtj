@@ -10,6 +10,9 @@ import UIKit
 import SpriteKit
 
 var highScore = 0
+var levelsCompleted = 0
+var currentLevel = 1
+
 
 class GameViewController: UIViewController {
 
@@ -17,20 +20,20 @@ class GameViewController: UIViewController {
         super.viewDidLoad()
         
         highScore = NSUserDefaults().integerForKey("Highscore")
-        
-        
+        levelsCompleted = NSUserDefaults().integerForKey("LevelsCompleted")
+        currentLevel = NSUserDefaults().integerForKey("CurrentLevel")
         
         if let scene = MainMenuScene(fileNamed:"MainMenuScene") {
             // Configure the view.
             let skView = self.view as! SKView
-            skView.showsFPS = true
-            skView.showsNodeCount = true
-            skView.showsPhysics = true
+//            skView.showsFPS = true
+//            skView.showsNodeCount = true
+            //skView.showsPhysics = true
             /* Sprite Kit applies additional optimizations to improve rendering performance */
             skView.ignoresSiblingOrder = true
             
             /* Set the scale mode to scale to fit the window */
-            scene.scaleMode = .AspectFill
+            scene.scaleMode = .AspectFit
             
             skView.presentScene(scene)
         }

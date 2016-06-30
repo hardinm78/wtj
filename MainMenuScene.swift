@@ -8,20 +8,33 @@
 
 import SpriteKit
 
+  var isMusicPlaying = false
+
 
 
 class MainMenuScene:SKScene {
     
+    private var musicBtn = SKSpriteNode()
+    private let musicON = SKTexture(imageNamed: "MusicOn")
+    private let musicOFF = SKTexture(imageNamed: "MusicOff")
+    
+    
     var playBtn = SKSpriteNode()
-    var scoreBtn = SKSpriteNode()
+    var optionsBtn = SKSpriteNode()
+    var levelSelectBtn = SKSpriteNode()
     var title = SKSpriteNode()
     
-    var scoreLabel = SKLabelNode()
+    var currentLvlLabel = SKSpriteNode()
     
     override func didMoveToView(view: SKView) {
+       
+        
         highScore = NSUserDefaults().integerForKey("Highscore")
+        levelsCompleted = NSUserDefaults().integerForKey("LevelsCompleted")
+        currentLevel = NSUserDefaults().integerForKey("CurrentLevel")
         initialize()
         
+       print(levelsCompleted)
     }
     
     func initialize(){
@@ -29,8 +42,29 @@ class MainMenuScene:SKScene {
         createGrounds()
         getLogo()
         getButtons()
-        showScore()
+        showLvl()
+     
     }
+    
+    func loadCurrentLevel(currentLevel:Int) {
+        
+        switch currentLevel {
+        case 0:
+            let level = CountyLine(fileNamed: "CountyLine")
+            level?.scaleMode = .AspectFit
+            self.view?.presentScene(level!, transition: SKTransition.fadeWithColor(UIColor.greenColor(), duration: NSTimeInterval(1.5)))
+        case 1:
+            let level = Capitol(fileNamed: "Capitol")
+            level?.scaleMode = .AspectFit
+            self.view?.presentScene(level!, transition: SKTransition.fadeWithColor(UIColor.greenColor(), duration: NSTimeInterval(1.5)))
+        default:
+            break
+            
+        }
+        
+        
+    }
+    
     
     override func update(currentTime: NSTimeInterval) {
         moveBackgroundsAndGrounds()
@@ -39,19 +73,40 @@ class MainMenuScene:SKScene {
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         
         for touch in touches {
+            print(currentLevel)
             let location = touch.locationInNode(self)
-            
-            if nodeAtPoint(location) == playBtn {
-                let level = Level1(fileNamed: "Level1")
-                level?.scaleMode = .AspectFit
-                self.view?.presentScene(level!, transition: SKTransition.fadeWithColor(UIColor.greenColor(), duration: NSTimeInterval(1.5)))
-                
+             if nodeAtPoint(location) == playBtn {
+                playBtn.texture = SKTexture(imageNamed: "Playr2")
+                loadCurrentLevel(currentLevel)
             }
             
-            if nodeAtPoint(location) == scoreBtn {
-                showScore() 
+            if nodeAtPoint(location) == optionsBtn {
+                let options = OptionsScene(fileNamed: "OptionsScene")
+                optionsBtn.texture = SKTexture(imageNamed: "Options 2")
+                options?.scaleMode = .AspectFit
+                self.view?.presentScene(options!, transition: SKTransition.fadeWithColor(UIColor.greenColor(), duration: NSTimeInterval(1.5)))
             }
             
+            
+            if nodeAtPoint(location) == levelSelectBtn {
+                let lvlSel = LevelSelectScene(fileNamed: "LevelSelectScene")
+                levelSelectBtn.texture = SKTexture(imageNamed: "Level Select 2")
+                lvlSel?.scaleMode = .AspectFit
+                self.view?.presentScene(lvlSel!, transition: SKTransition.fadeWithColor(UIColor.greenColor(), duration: NSTimeInterval(1.5)))
+            }
+            
+            
+            if nodeAtPoint(location) == musicBtn {
+                if !isMusicPlaying{
+                    isMusicPlaying = true
+                    AudioManager.instance.playBGMusic()
+                    musicBtn.texture = musicON
+                }else {
+                    isMusicPlaying = false
+                    AudioManager.instance.stopBGMusic()
+                    musicBtn.texture = musicOFF
+                }
+            }
         }
         
     }
@@ -89,9 +144,6 @@ class MainMenuScene:SKScene {
             if bgNode.position.x < -(self.frame.width){
                 bgNode.position.x += bgNode.size.width * 3
             }
-            
-            
-            
         }))
         
         enumerateChildNodesWithName("Ground",usingBlock: ({ (node, error) in
@@ -107,14 +159,20 @@ class MainMenuScene:SKScene {
 
     func getButtons() {
         playBtn = self.childNodeWithName("Play") as! SKSpriteNode
-        scoreBtn = self.childNodeWithName("Score") as! SKSpriteNode
+        optionsBtn = self.childNodeWithName("Options") as! SKSpriteNode
+        musicBtn = self.childNodeWithName("Music") as! SKSpriteNode
+        levelSelectBtn = self.childNodeWithName("Level Select") as! SKSpriteNode
         
+        if isMusicPlaying {
+            musicBtn.texture = musicON
+        }else {
+            musicBtn.texture = musicOFF
+        }
         
     }
 
     func getLogo() {
         title = childNodeWithName("Title") as! SKSpriteNode
-        
         
         let moveUp = SKAction.moveToY(title.position.y + 10, duration: NSTimeInterval(1))
         let moveDown = SKAction.moveToY(title.position.y - 10, duration: NSTimeInterval(1))
@@ -125,18 +183,44 @@ class MainMenuScene:SKScene {
         
     }
     
+    func showLvl() {
+       
+        currentLvlLabel = childNodeWithName("Current Level") as! SKSpriteNode
     
-    
-    func showScore() {
-        scoreLabel.removeFromParent()
-        scoreLabel = SKLabelNode(fontNamed: "Highway Gothic")
-        scoreLabel.fontSize = 120
-        scoreLabel.text = "\(highScore)"
-        scoreLabel.position = CGPoint(x: 0, y: -200)
-        scoreLabel.zPosition = 9
         
-        self.addChild(scoreLabel)
-        
+        switch currentLevel {
+        case 0:
+            currentLvlLabel.texture = SKTexture(imageNamed: "County Line Rd")
+        case 1:
+            currentLvlLabel.texture = SKTexture(imageNamed: "Capitol")
+        case 2:
+            currentLvlLabel.texture = SKTexture(imageNamed: "Ridgewood")
+        case 3:
+            currentLvlLabel.texture = SKTexture(imageNamed: "High St")
+        case 4:
+            currentLvlLabel.texture = SKTexture(imageNamed: "State St")
+        case 5:
+            currentLvlLabel.texture = SKTexture(imageNamed: "Terry Rd")
+        case 6:
+            currentLvlLabel.texture = SKTexture(imageNamed: "Fortification")
+        case 7:
+            currentLvlLabel.texture = SKTexture(imageNamed: "McDowell")
+        case 8:
+            currentLvlLabel.texture = SKTexture(imageNamed: "Ellis Ave")
+        case 9:
+            currentLvlLabel.texture = SKTexture(imageNamed: "Woodrow Wilson")
+        case 10:
+            currentLvlLabel.texture = SKTexture(imageNamed: "Old Canton")
+        case 11:
+            currentLvlLabel.texture = SKTexture(imageNamed: "Lakeland")
+        default:
+            break
+            
+            
+            
+            
+        }
+
         
     }
     

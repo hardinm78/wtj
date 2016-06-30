@@ -2,11 +2,11 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "Obstacle 4.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "FatBoy_Bomb.png",
       "scale" : "2x"
     },
     {

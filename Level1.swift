@@ -12,8 +12,8 @@ import SpriteKit
 class Level1: SKScene, SKPhysicsContactDelegate {
     
     var player = Player()
-    var obstacles = [SKSpriteNode]()
-    
+    var lowObstacles = [SKSpriteNode]()
+    var highObstacles = [SKSpriteNode]()
     var scoreLabel = SKLabelNode()
     var score = 0
     var pausePanel = SKSpriteNode()
@@ -23,7 +23,10 @@ class Level1: SKScene, SKPhysicsContactDelegate {
     var playerOnObstacle = false
     var isAlive = false
     
+    
+    
     var spawner = NSTimer()
+    var spawner2 = NSTimer()
     var counter = NSTimer()
     
     override func didMoveToView(view: SKView) {
@@ -33,7 +36,7 @@ class Level1: SKScene, SKPhysicsContactDelegate {
         let swipeDown:UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(Level1.swipedDown(_:)))
         swipeDown.direction = .Down
         view.addGestureRecognizer(swipeDown)
-        
+        player.runAction(SKAction.playSoundFileNamed("Jump.wav", waitForCompletion: false))
         initialize()
     }
     
@@ -46,6 +49,8 @@ class Level1: SKScene, SKPhysicsContactDelegate {
         if movePlayer {
             player.position.x -= 3
         }
+        
+        
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -63,6 +68,14 @@ class Level1: SKScene, SKPhysicsContactDelegate {
                 if highScore < score {
                     NSUserDefaults.standardUserDefaults().setInteger(score, forKey: "Highscore")
                 }
+                spawner.invalidate()
+                spawner2.invalidate()
+                counter.invalidate()
+                
+                if levelsCompleted < 1 {
+                NSUserDefaults.standardUserDefaults().setInteger(1, forKey: "LevelsCompleted")
+                }
+
                 let mainMenu = MainMenuScene(fileNamed: "MainMenuScene")
                 mainMenu!.scaleMode = .AspectFit
                 self.view?.presentScene(mainMenu!, transition:SKTransition.fadeWithColor(UIColor.orangeColor(), duration: NSTimeInterval(1.5)))
@@ -73,10 +86,13 @@ class Level1: SKScene, SKPhysicsContactDelegate {
                 
             }
             if nodeAtPoint(location).name == "Resume" {
+                
+                
                 pausePanel.removeFromParent()
                 self.scene?.paused = false
                 
-                spawner = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(2.5, secNum: 6)), target: self, selector: #selector(Level1.spawnObstacles), userInfo: nil, repeats: true)
+                spawner = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(2.5, secNum: 6)), target: self, selector: #selector(Level1.spawnLowObstacles), userInfo: nil, repeats: true)
+                spawner2 = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(2.5, secNum: 6)), target: self, selector: #selector(Level1.spawnHighObstacles), userInfo: nil, repeats: true)
                 
                 counter = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(1.3), target: self, selector: #selector(Level1.incrementScore),userInfo: nil, repeats: true)
                 
@@ -109,12 +125,25 @@ class Level1: SKScene, SKPhysicsContactDelegate {
                 playerOnObstacle = true
             }
             
+        }
+        
+        
+        if firstBody.node?.name == "Player" && secondBody.node?.name == "Bomb" {
+            secondBody.node?.physicsBody?.affectedByGravity = true
+            secondBody.node?.physicsBody?.mass = 0.1
+            playerDied()
+        }
+        
+        if firstBody.node?.name == "Player" && secondBody.node?.name == "Pothole" {
+            playerDied()
             
         }
         
-        if firstBody.node?.name == "Player" && secondBody.node?.name == "Cactus" {
-            playerDied()
+        if firstBody.node?.name == "Player" && secondBody.node?.name == "Water" {
+            secondBody.node?.removeFromParent()
+            player.runAction(SKAction.playSoundFileNamed("Coin.wav", waitForCompletion: false))
         }
+        
     }
     
     func didEndContact(contact: SKPhysicsContact) {
@@ -141,16 +170,21 @@ class Level1: SKScene, SKPhysicsContactDelegate {
     func swipedUp(sender:UISwipeGestureRecognizer){
         if canJump{
             canJump=false
+            player.runAction(SKAction.playSoundFileNamed("Jump.wav", waitForCompletion: false))
             player.jump()
         }
         if playerOnObstacle {
+            player.runAction(SKAction.playSoundFileNamed("Jump.wav", waitForCompletion: false))
             player.jump()
         }
         
-        print("swiped up")
+        //print("swiped up")
     }
     func swipedDown(sender:UISwipeGestureRecognizer){
-        print("swiped down")
+        if canJump {
+        player.duck()
+        }
+        //print("swiped down")
     }
     func initialize() {
         
@@ -161,10 +195,14 @@ class Level1: SKScene, SKPhysicsContactDelegate {
         createBG()
         createGrounds()
         createPlayer()
-        createObstacles()
+        createLowObstacles()
+        createHighObstacles()
         getLabel()
         
-        spawner = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(2.5, secNum: 6)), target: self, selector: #selector(Level1.spawnObstacles), userInfo: nil, repeats: true)
+        spawner = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(2.5, secNum: 6)), target: self, selector: #selector(Level1.spawnLowObstacles), userInfo: nil, repeats: true)
+        
+        spawner2 = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(2.5, secNum: 6)), target: self, selector: #selector(Level1.spawnHighObstacles), userInfo: nil, repeats: true)
+        
         
         counter = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(1.3), target: self, selector: #selector(Level1.incrementScore),userInfo: nil, repeats: true)
         
@@ -173,13 +211,14 @@ class Level1: SKScene, SKPhysicsContactDelegate {
     func createPlayer() {
         player = Player(imageNamed: "Running0")
         player.initialize()
-        player.position = CGPoint(x: -10, y: 20)
+        player.position = CGPoint(x: -240, y: 20)
+        
         self.addChild(player)
     }
     
     func createBG() {
         for i in 0...2 {
-            let bg = SKSpriteNode(imageNamed: "BG3")
+            let bg = SKSpriteNode(imageNamed: "BG4")
             bg.name = "BG"
             bg.anchorPoint = CGPoint(x: 0.5, y: 0.5)
             bg.position = CGPoint(x: CGFloat(i) * bg.size.width, y: 0)
@@ -210,7 +249,7 @@ class Level1: SKScene, SKPhysicsContactDelegate {
     func moveBackgroundsAndGrounds() {
         
         enumerateChildNodesWithName("BG",usingBlock: ({ (node, error) in
-            node.position.x -= 4
+            node.position.x -= 10
             
             let bgNode = node as! SKSpriteNode
             
@@ -223,7 +262,7 @@ class Level1: SKScene, SKPhysicsContactDelegate {
         }))
         
         enumerateChildNodesWithName("Ground",usingBlock: ({ (node, error) in
-            node.position.x -= 2
+            node.position.x -= 5
             
             let gNode = node as! SKSpriteNode
             
@@ -233,50 +272,125 @@ class Level1: SKScene, SKPhysicsContactDelegate {
         }))
     }
     
-    func createObstacles() {
+    func createLowObstacles() {
         
-        for i in 0...5 {
-            let obstacle = SKSpriteNode(imageNamed: "Obstacle \(i)")
+        for i in 0...1 {
+            let obstacle = SKSpriteNode(imageNamed: "LowObstacle\(i)")
+            
             
             if i == 0 {
-                obstacle.name = "Cactus"
+                obstacle.name = "Pothole"
                 obstacle.setScale(0.4)
-            }else {
-                obstacle.name = "Obstacle"
+            }else if i == 1{
+                obstacle.name = "Barrel"
                 obstacle.setScale(0.5)
             }
             
             
             
-            
-            obstacle.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-            obstacle.zPosition = 1
-            
-            obstacle.physicsBody = SKPhysicsBody(rectangleOfSize: obstacle.size)
-            obstacle.physicsBody?.allowsRotation = false
-            obstacle.physicsBody?.categoryBitMask = ColliderType.Obstacle
-            
-            obstacles.append(obstacle)
+            lowObstacles.append(obstacle)
         }
         
     }
     
-    func spawnObstacles() {
-        let index = Int(arc4random_uniform(UInt32(obstacles.count)))
+    func createHighObstacles() {
         
-        let obstacle = obstacles[index].copy() as! SKSpriteNode
+        for i in 0...1 {
+            let obstacle = SKSpriteNode(imageNamed: "HighObstacle\(i)")
+            
+            
+            if i == 0 {
+                obstacle.name = "Bomb"
+                obstacle.setScale(0.4)
+            }else if i == 1 {
+                obstacle.name = "Water"
+                obstacle.setScale(1)
+            }
+            
+            highObstacles.append(obstacle)
+        }
         
-        obstacle.position = CGPoint(x: self.frame.width + obstacle.size.width, y: 50)
+    }
+
+    
+    func spawnLowObstacles() {
+        let index = Int(arc4random_uniform(UInt32(lowObstacles.count)))
+        print(index)
+        let obstacle = lowObstacles[index].copy() as! SKSpriteNode
+        obstacle.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        obstacle.zPosition = 4
+        
+        
+        obstacle.physicsBody = SKPhysicsBody(rectangleOfSize: obstacle.size)
+        
+        obstacle.physicsBody?.allowsRotation = false
+        obstacle.physicsBody?.categoryBitMask = ColliderType.Obstacle
+        obstacle.physicsBody?.collisionBitMask = ColliderType.Player | ColliderType.Ground
+        //obstacle.physicsBody?.dynamic = false
+        
+        
+        let move = SKAction.moveToX(-(self.frame.size.width * 2), duration: NSTimeInterval(7))
+        
+        if index == 0{
+            obstacle.position = CGPoint(x: self.frame.width + obstacle.size.width, y: -340)
+            obstacle.physicsBody?.dynamic = false
+        }else if index == 1{
+            obstacle.position = CGPoint(x: self.frame.width + obstacle.size.width, y: -200)
+            obstacle.physicsBody?.dynamic = false
+        }else {
+            
+        }
+        
         
         self.addChild(obstacle)
         
-        let move = SKAction.moveToX(-(self.frame.size.width * 2), duration: NSTimeInterval(15))
         
+        
+        //
         let remove = SKAction.removeFromParent()
         
         let sequence = SKAction.sequence([move,remove])
         obstacle.runAction(sequence)
+    }
+    
+    func spawnHighObstacles() {
+        let index = Int(arc4random_uniform(UInt32(highObstacles.count)))
+        print(index)
+        let obstacle = highObstacles[index].copy() as! SKSpriteNode
+        obstacle.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        obstacle.zPosition = 4
         
+        
+        obstacle.physicsBody = SKPhysicsBody(rectangleOfSize: obstacle.size)
+        
+        obstacle.physicsBody?.allowsRotation = false
+        obstacle.physicsBody?.categoryBitMask = ColliderType.Obstacle
+        //obstacle.physicsBody?.collisionBitMask = ColliderType.Player | ColliderType.Ground
+        
+        let move = SKAction.moveToX(-(self.frame.size.width * 2), duration: NSTimeInterval(4))
+        
+        
+        if index == 0 {
+        obstacle.position = CGPoint(x: self.frame.width + obstacle.size.width, y: 50)
+        obstacle.physicsBody?.affectedByGravity = false
+        }else if index == 1 {
+            obstacle.position = CGPoint(x: self.frame.width + obstacle.size.width, y: 150)
+            obstacle.physicsBody?.affectedByGravity = false
+
+        }
+        
+        
+        
+        
+        self.addChild(obstacle)
+        
+        
+        
+        //
+        let remove = SKAction.removeFromParent()
+        
+        let sequence = SKAction.sequence([move,remove])
+        obstacle.runAction(sequence)
     }
     
     func randomBetweenNumbers(firstNum:CGFloat, secNum: CGFloat) -> CGFloat{
@@ -290,7 +404,7 @@ class Level1: SKScene, SKPhysicsContactDelegate {
     func checkPlayersBounds() {
         if isAlive{
             if player.position.x < -(self.frame.size.width/2) - 80{
-                playerDied()
+                playerDiedOffScreen()
             }
         }
     }
@@ -333,7 +447,7 @@ class Level1: SKScene, SKPhysicsContactDelegate {
         quit.position = CGPoint(x: 155, y: 0)
         quit.zPosition = 11
         quit.setScale(0.75)
-
+        
         pausePanel.addChild(resume)
         pausePanel.addChild(quit)
         
@@ -345,23 +459,90 @@ class Level1: SKScene, SKPhysicsContactDelegate {
         
         
         
+        let dead = SKSpriteNode(imageNamed: "Dead")
+        dead.position = player.position
+        dead.zPosition = 5
+        dead.setScale(0.45)
+        dead.physicsBody = SKPhysicsBody(circleOfRadius: 50)
+        dead.physicsBody!.mass = 0.5
+        dead.physicsBody?.dynamic = true
+        dead.physicsBody?.allowsRotation = true
+        dead.runAction(SKAction.playSoundFileNamed("Death.mp3", waitForCompletion: false))
+        
+        player.removeFromParent()
+        
+        dead.alpha = 0.5
+        scene?.addChild(dead)
+        //dead.physicsBody?.applyImpulse(CGVector(dx: 50, dy: 20))
+        dead.physicsBody?.applyAngularImpulse(-0.1)
+        
+        
         if highScore < score {
             NSUserDefaults.standardUserDefaults().setInteger(score, forKey: "Highscore")
         }
         
         
-        player.removeFromParent()
         
-        for child in children {
-            if child.name == "Obstacle" || child.name == "Cactus" {
+        let seconds = 1.0
+        let delay = seconds * Double(NSEC_PER_SEC)
+        let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+        dispatch_after(dispatchTime, dispatch_get_main_queue()) {
+            
+            for child in self.children {
+                if child.name == "Pothole" || child.name == "Bomb" || child.name == "Barrel" {
+                    child.removeFromParent()
+                }
+            }
+            
+            dead.physicsBody?.dynamic = false
+            dead.removeFromParent()
+            
+            
+            self.spawner.invalidate()
+            self.spawner2.invalidate()
+            self.counter.invalidate()
+            
+            self.isAlive = false
+            
+            let restart = SKSpriteNode(imageNamed: "Restart")
+            let quit = SKSpriteNode(imageNamed: "Quit")
+            
+            restart.name = "Restart"
+            restart.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+            restart.position = CGPoint(x: -200, y: -100)
+            restart.zPosition = 10
+            restart.setScale(0)
+            
+            quit.name = "Quit"
+            quit.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+            quit.position = CGPoint(x: 200, y: -100)
+            quit.zPosition = 10
+            quit.setScale(0)
+            
+            let scaleUp = SKAction.scaleTo(1, duration: NSTimeInterval(0.5))
+            restart.runAction(scaleUp)
+            quit.runAction(scaleUp)
+            
+            self.addChild(restart)
+            self.addChild(quit)
+        }
+    }
+    
+    func playerDiedOffScreen() {
+        for child in self.children {
+            if child.name == "Pothole" || child.name == "Bomb" || child.name == "Barrel" {
                 child.removeFromParent()
             }
         }
         
-        spawner.invalidate()
-        counter.invalidate()
+        self.runAction(SKAction.playSoundFileNamed("Death.mp3", waitForCompletion: false))
         
-        isAlive = false
+        player.removeFromParent()
+        self.spawner.invalidate()
+        self.spawner2.invalidate()
+        self.counter.invalidate()
+        
+        self.isAlive = false
         
         let restart = SKSpriteNode(imageNamed: "Restart")
         let quit = SKSpriteNode(imageNamed: "Quit")
@@ -384,10 +565,8 @@ class Level1: SKScene, SKPhysicsContactDelegate {
         
         self.addChild(restart)
         self.addChild(quit)
-        
+
     }
-    
-    
 }
 
 
