@@ -9,16 +9,6 @@
 import SpriteKit
 
 
-struct ColliderType {
-    
-    static let Player: UInt32 = 1
-    static let Ground: UInt32 = 2
-    static let Obstacle: UInt32 = 3
-   }
-
-
-    
-
 class Player:SKSpriteNode {
    
     func initialize() {
@@ -45,7 +35,7 @@ class Player:SKSpriteNode {
         self.physicsBody?.allowsRotation = false
         self.physicsBody?.categoryBitMask = ColliderType.Player
         self.physicsBody?.collisionBitMask = ColliderType.Ground | ColliderType.Obstacle
-        self.physicsBody?.contactTestBitMask = ColliderType.Ground | ColliderType.Obstacle
+        self.physicsBody?.contactTestBitMask = ColliderType.Ground | ColliderType.Obstacle | ColliderType.Collectible
         
         
         self.runAction(SKAction.repeatActionForever(runAnimation))

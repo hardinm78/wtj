@@ -9,11 +9,13 @@
 import SpriteKit
 
 class CountyLine: SKScene, SKPhysicsContactDelegate {
+    
     var BG = BGAndGround()
     var player = Player()
     var lowObstacles = [SKSpriteNode]()
     var highObstacles = [SKSpriteNode]()
     var scoreLabel = SKLabelNode()
+    var livesLabel = SKLabelNode()
     var messageLabel = SKLabelNode()
     var score = 100
     var pausePanel = SKSpriteNode()
@@ -25,7 +27,7 @@ class CountyLine: SKScene, SKPhysicsContactDelegate {
     var spawner = NSTimer()
     var spawner2 = NSTimer()
     var counter = NSTimer()
-    
+    var lives = 0
     
     
     override func didMoveToView(view: SKView) {
@@ -39,6 +41,7 @@ class CountyLine: SKScene, SKPhysicsContactDelegate {
         
         player.runAction(SKAction.playSoundFileNamed("Jump.wav", waitForCompletion: false))
         initialize()
+        
     }
     
     override func update(currentTime: NSTimeInterval) {
@@ -63,6 +66,27 @@ class CountyLine: SKScene, SKPhysicsContactDelegate {
                 level!.scaleMode = .AspectFit
                 self.view?.presentScene(level!, transition:SKTransition.fadeWithColor(UIColor.greenColor(), duration: NSTimeInterval(1.5)))
             }
+            
+            if nodeAtPoint(location).name == "ContinueTry" {
+                
+                childNodeWithName("ContinueTry")?.removeFromParent()
+                childNodeWithName("Quit")?.removeFromParent()
+                
+                isAlive = true
+                
+                BG.createBG(self)
+                BG.createGrounds(self)
+                createPlayer()
+                
+                spawner = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(2, secNum: 4)), target: self, selector: #selector(Level1.spawnLowObstacles), userInfo: nil, repeats: true)
+                
+                spawner2 = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(4, secNum: 8)), target: self, selector: #selector(Level1.spawnHighObstacles), userInfo: nil, repeats: true)
+                
+                
+                counter = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(1.3), target: self, selector: #selector(Level1.incrementScore),userInfo: nil, repeats: true)
+            }
+            
+            
             
             if nodeAtPoint(location).name == "Quit" {
                 if highScore < score {
@@ -180,8 +204,10 @@ class CountyLine: SKScene, SKPhysicsContactDelegate {
     }
     
     func initialize() {
+        lives = 3
         physicsWorld.contactDelegate = self
         isAlive = true
+        
         BG.createBG(self)
         BG.createGrounds(self)
         createPlayer()
@@ -189,9 +215,10 @@ class CountyLine: SKScene, SKPhysicsContactDelegate {
         createHighObstacles()
         getLabel()
         
-        spawner = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(2.5, secNum: 6)), target: self, selector: #selector(Level1.spawnLowObstacles), userInfo: nil, repeats: true)
+        spawner = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(2, secNum: 4)), target: self, selector: #selector(Level1.spawnLowObstacles), userInfo: nil, repeats: true)
         
-        spawner2 = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(2.5, secNum: 6)), target: self, selector: #selector(Level1.spawnHighObstacles), userInfo: nil, repeats: true)
+        spawner2 = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(4, secNum: 8)), target: self, selector: #selector(Level1.spawnHighObstacles), userInfo: nil, repeats: true)
+        
         
         counter = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(1.3), target: self, selector: #selector(Level1.incrementScore),userInfo: nil, repeats: true)
     }
@@ -203,39 +230,46 @@ class CountyLine: SKScene, SKPhysicsContactDelegate {
         
         self.addChild(player)
     }
-    
-    
-    
     func createLowObstacles() {
-        for i in 0...1 {
-            let obstacle = SKSpriteNode(imageNamed: "LowObstacle\(i)")
-            
-            if i == 0 {
-                obstacle.name = "Pothole"
-                obstacle.setScale(0.4)
-            }else if i == 1{
-                obstacle.name = "Barrel"
-                obstacle.setScale(0.5)
-            }
-            lowObstacles.append(obstacle)
-        }
+        
+        
+        let obstacle1 = SKSpriteNode(imageNamed:"Pothole")
+        obstacle1.name = "Pothole"
+        obstacle1.setScale(0.4)
+        
+        lowObstacles.append(obstacle1)
+        
+        let obstacle2 = SKSpriteNode(imageNamed:"Barrel")
+        obstacle2.name = "Barrel"
+        obstacle2.setScale(0.5)
+        
+        
+        lowObstacles.append(obstacle2)
+        
     }
     
     func createHighObstacles() {
-        for i in 0...1 {
-            let obstacle = SKSpriteNode(imageNamed: "HighObstacle\(i)")
-            
-            if i == 0 {
-                obstacle.name = "Bomb"
-                obstacle.setScale(0.4)
-            }else if i == 1 {
-                obstacle.name = "Water"
-                obstacle.setScale(1)
-            }
-            highObstacles.append(obstacle)
-        }
+        
+        let obstacle1 = SKSpriteNode(imageNamed:"Bomb")
+        obstacle1.name = "Bomb"
+        obstacle1.setScale(0.4)
+        
+        highObstacles.append(obstacle1)
+        
+        
+        let obstacle2 = SKSpriteNode(imageNamed:"Water")
+        obstacle2.name = "Water"
+        obstacle2.setScale(1)
+        
+        highObstacles.append(obstacle2)
+        
+        let obstacle3 = SKSpriteNode(imageNamed:"Donuts")
+        obstacle3.name = "Water"
+        obstacle3.setScale(1)
+        
+        highObstacles.append(obstacle3)
+        
     }
-    
     func spawnLowObstacles() {
         let index = Int(arc4random_uniform(UInt32(lowObstacles.count)))
         print(index)
@@ -264,6 +298,12 @@ class CountyLine: SKScene, SKPhysicsContactDelegate {
         let remove = SKAction.removeFromParent()
         let sequence = SKAction.sequence([move,remove])
         obstacle.runAction(sequence)
+        
+        spawner.invalidate()
+        spawner = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(2, secNum: 4)), target: self, selector: #selector(Level1.spawnLowObstacles), userInfo: nil, repeats: true)
+        
+        
+        
     }
     
     func spawnHighObstacles() {
@@ -274,23 +314,32 @@ class CountyLine: SKScene, SKPhysicsContactDelegate {
         obstacle.zPosition = 4
         obstacle.physicsBody = SKPhysicsBody(rectangleOfSize: obstacle.size)
         obstacle.physicsBody?.allowsRotation = false
-        obstacle.physicsBody?.categoryBitMask = ColliderType.Obstacle
+        obstacle.physicsBody?.affectedByGravity = false
         //obstacle.physicsBody?.collisionBitMask = ColliderType.Player | ColliderType.Ground
         
         let move = SKAction.moveToX(-(self.frame.size.width * 2), duration: NSTimeInterval(4))
         
-        if index == 0 {
+        if obstacle.name == "Bomb" {
+            obstacle.physicsBody?.categoryBitMask = ColliderType.Obstacle
             obstacle.position = CGPoint(x: self.frame.width + obstacle.size.width, y: 50)
             obstacle.physicsBody?.affectedByGravity = false
-        }else if index == 1 {
+        }else if obstacle.name == "Water" {
+            obstacle.physicsBody?.categoryBitMask = ColliderType.Collectible
+            obstacle.position = CGPoint(x: self.frame.width + obstacle.size.width, y: 150)
+            obstacle.physicsBody?.affectedByGravity = false
+        }else if obstacle.name == "Donuts" {
+            obstacle.physicsBody?.categoryBitMask = ColliderType.Collectible
             obstacle.position = CGPoint(x: self.frame.width + obstacle.size.width, y: 150)
             obstacle.physicsBody?.affectedByGravity = false
         }
+        
         self.addChild(obstacle)
         
         let remove = SKAction.removeFromParent()
         let sequence = SKAction.sequence([move,remove])
         obstacle.runAction(sequence)
+        spawner2.invalidate()
+        spawner2 = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(4, secNum: 8)), target: self, selector: #selector(Level1.spawnHighObstacles), userInfo: nil, repeats: true)
     }
     
     func randomBetweenNumbers(firstNum:CGFloat, secNum: CGFloat) -> CGFloat{
@@ -311,6 +360,9 @@ class CountyLine: SKScene, SKPhysicsContactDelegate {
         scoreLabel = self.childNodeWithName("Score Label") as! SKLabelNode
         scoreLabel.text = "100M"
         messageLabel = self.childNodeWithName("Message") as! SKLabelNode
+        messageLabel.text = "Survive for 100 meters"
+        livesLabel = self.childNodeWithName("Lives Label") as! SKLabelNode
+        livesLabel.text = "\(lives)"
     }
     
     func incrementScore() {
@@ -353,6 +405,8 @@ class CountyLine: SKScene, SKPhysicsContactDelegate {
     
     func playerDied() {
         
+        lives -= 1
+        livesLabel.text = "\(lives)"
         let dead = SKSpriteNode(imageNamed: "Dead")
         dead.position = player.position
         dead.zPosition = 5
@@ -379,7 +433,7 @@ class CountyLine: SKScene, SKPhysicsContactDelegate {
         dispatch_after(dispatchTime, dispatch_get_main_queue()) {
             
             for child in self.children {
-                if child.name == "Pothole" || child.name == "Bomb" || child.name == "Barrel" {
+                if child.name == "Pothole" || child.name == "Bomb" || child.name == "Barrel" || child.name == "Water" {
                     child.removeFromParent()
                 }
             }
@@ -394,9 +448,93 @@ class CountyLine: SKScene, SKPhysicsContactDelegate {
             
             self.isAlive = false
             
+            if self.lives <= 0 {
+                
+                let restart = SKSpriteNode(imageNamed: "Restart")
+                let quit = SKSpriteNode(imageNamed: "Quit")
+                let gameOver = SKLabelNode(text: "Game Over")
+                gameOver.fontName = "Road Rage"
+                gameOver.fontSize = 100
+                gameOver.fontColor = UIColor.redColor()
+                gameOver.zPosition = 10
+                gameOver.position = CGPoint(x: 0, y: 10)
+                restart.name = "Restart"
+                restart.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+                restart.position = CGPoint(x: -200, y: -100)
+                restart.zPosition = 10
+                restart.setScale(0)
+                
+                quit.name = "Quit"
+                quit.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+                quit.position = CGPoint(x: 200, y: -100)
+                quit.zPosition = 10
+                quit.setScale(0)
+                
+                let scaleUp = SKAction.scaleTo(0.8, duration: NSTimeInterval(0.5))
+                restart.runAction(scaleUp)
+                quit.runAction(scaleUp)
+                
+                self.addChild(gameOver)
+                self.addChild(restart)
+                self.addChild(quit)
+            }else {
+                
+                let continueTry = SKSpriteNode(imageNamed: "Play")
+                let quit = SKSpriteNode(imageNamed: "Quit")
+                
+                continueTry.name = "ContinueTry"
+                continueTry.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+                continueTry.position = CGPoint(x: -200, y: -100)
+                continueTry.zPosition = 10
+                continueTry.setScale(0)
+                
+                quit.name = "Quit"
+                quit.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+                quit.position = CGPoint(x: 200, y: -100)
+                quit.zPosition = 10
+                quit.setScale(0)
+                
+                let scaleUp = SKAction.scaleTo(1, duration: NSTimeInterval(0.5))
+                continueTry.runAction(scaleUp)
+                quit.runAction(scaleUp)
+                
+                self.addChild(continueTry)
+                self.addChild(quit)
+                
+            }
+        }
+    }
+    
+    func playerDiedOffScreen() {
+        lives -= 1
+        livesLabel.text = "\(lives)"
+        
+        for child in self.children {
+            if child.name == "Pothole" || child.name == "Bomb" || child.name == "Barrel" || child.name == "Water" {
+                child.removeFromParent()
+            }
+        }
+
+        
+        self.runAction(SKAction.playSoundFileNamed("Death.mp3", waitForCompletion: false))
+        
+        player.removeFromParent()
+        self.spawner.invalidate()
+        self.spawner2.invalidate()
+        self.counter.invalidate()
+        
+        self.isAlive = false
+        
+        if self.lives <= 0 {
+            
             let restart = SKSpriteNode(imageNamed: "Restart")
             let quit = SKSpriteNode(imageNamed: "Quit")
-            
+            let gameOver = SKLabelNode(text: "Game Over")
+            gameOver.fontName = "Road Rage"
+            gameOver.fontSize = 100
+            gameOver.fontColor = UIColor.redColor()
+            gameOver.zPosition = 10
+            gameOver.position = CGPoint(x: 0, y: 10)
             restart.name = "Restart"
             restart.anchorPoint = CGPoint(x: 0.5, y: 0.5)
             restart.position = CGPoint(x: -200, y: -100)
@@ -409,61 +547,40 @@ class CountyLine: SKScene, SKPhysicsContactDelegate {
             quit.zPosition = 10
             quit.setScale(0)
             
-            let scaleUp = SKAction.scaleTo(1, duration: NSTimeInterval(0.5))
+            let scaleUp = SKAction.scaleTo(0.8, duration: NSTimeInterval(0.5))
             restart.runAction(scaleUp)
             quit.runAction(scaleUp)
             
+            self.addChild(gameOver)
             self.addChild(restart)
             self.addChild(quit)
+        }else {
+            
+            let continueTry = SKSpriteNode(imageNamed: "Play")
+            let quit = SKSpriteNode(imageNamed: "Quit")
+            
+            continueTry.name = "ContinueTry"
+            continueTry.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+            continueTry.position = CGPoint(x: -200, y: -100)
+            continueTry.zPosition = 10
+            continueTry.setScale(0)
+            
+            quit.name = "Quit"
+            quit.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+            quit.position = CGPoint(x: 200, y: -100)
+            quit.zPosition = 10
+            quit.setScale(0)
+            
+            let scaleUp = SKAction.scaleTo(1, duration: NSTimeInterval(0.5))
+            continueTry.runAction(scaleUp)
+            quit.runAction(scaleUp)
+            
+            self.addChild(continueTry)
+            self.addChild(quit)
+            
         }
-    }
-    
-    func playerDiedOffScreen() {
-        for child in self.children {
-            if child.name == "Pothole" || child.name == "Bomb" || child.name == "Barrel" {
-                child.removeFromParent()
-            }
-        }
-        
-        self.runAction(SKAction.playSoundFileNamed("Death.mp3", waitForCompletion: false))
-        
-        player.removeFromParent()
-        self.spawner.invalidate()
-        self.spawner2.invalidate()
-        self.counter.invalidate()
-        
-        self.isAlive = false
-        
-        let restart = SKSpriteNode(imageNamed: "Restart")
-        let quit = SKSpriteNode(imageNamed: "Quit")
-        
-        restart.name = "Restart"
-        restart.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        restart.position = CGPoint(x: -200, y: -100)
-        restart.zPosition = 10
-        restart.setScale(0)
-        
-        quit.name = "Quit"
-        quit.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        quit.position = CGPoint(x: 200, y: -100)
-        quit.zPosition = 10
-        quit.setScale(0)
-        
-        let scaleUp = SKAction.scaleTo(1, duration: NSTimeInterval(0.5))
-        restart.runAction(scaleUp)
-        quit.runAction(scaleUp)
-        
-        self.addChild(restart)
-        self.addChild(quit)
-        
     }
 }
-
-
-
-
-
-
 
 
 

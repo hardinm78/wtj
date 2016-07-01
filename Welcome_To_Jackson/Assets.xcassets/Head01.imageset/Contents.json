@@ -2,11 +2,11 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "pothole.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "Head01.png",
       "scale" : "2x"
     },
     {
