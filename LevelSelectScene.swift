@@ -279,11 +279,11 @@ class LevelSelectScene: SKScene {
     }
     func createGrounds() {
         for i in 0...2 {
-            let g = SKSpriteNode(imageNamed: "Ground2")
+            let g = SKSpriteNode(imageNamed: "rd4x")
             g.name = "Ground"
             g.anchorPoint = CGPoint(x: 0.5, y: 0.5)
             
-            g.position = CGPoint(x: CGFloat(i) * g.size.width, y: -(self.frame.size.height/2))
+            g.position = CGPoint(x: CGFloat(i) * g.size.width, y: -(self.frame.size.height/2) + 50)
             g.zPosition = 2
             
             self.addChild(g)
@@ -292,7 +292,7 @@ class LevelSelectScene: SKScene {
     func moveBackgroundsAndGrounds() {
         
         enumerateChildNodesWithName("BG",usingBlock: ({ (node, error) in
-            node.position.x -= 4
+            node.position.x -= 2
             
             let bgNode = node as! SKSpriteNode
             
@@ -305,7 +305,7 @@ class LevelSelectScene: SKScene {
         }))
         
         enumerateChildNodesWithName("Ground",usingBlock: ({ (node, error) in
-            node.position.x -= 2
+            node.position.x -= 4
             
             let gNode = node as! SKSpriteNode
             

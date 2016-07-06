@@ -17,7 +17,7 @@ class CountyLine: SKScene, SKPhysicsContactDelegate {
     var scoreLabel = SKLabelNode()
     var livesLabel = SKLabelNode()
     var messageLabel = SKLabelNode()
-    var score = 100
+    var score = 0
     var pausePanel = SKSpriteNode()
     var canJump = false
     var movePlayer = false
@@ -83,7 +83,7 @@ class CountyLine: SKScene, SKPhysicsContactDelegate {
                 spawner2 = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(4, secNum: 8)), target: self, selector: #selector(Level1.spawnHighObstacles), userInfo: nil, repeats: true)
                 
                 
-                counter = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(1.3), target: self, selector: #selector(Level1.incrementScore),userInfo: nil, repeats: true)
+                //counter = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(1.3), target: self, selector: #selector(Level1.incrementScore),userInfo: nil, repeats: true)
             }
             
             
@@ -96,12 +96,6 @@ class CountyLine: SKScene, SKPhysicsContactDelegate {
                 spawner2.invalidate()
                 counter.invalidate()
                 
-                if levelsCompleted < 1 {
-                    NSUserDefaults.standardUserDefaults().setInteger(1, forKey: "LevelsCompleted")
-                }
-                //                if currentLevel < 1 {
-                //                    NSUserDefaults.standardUserDefaults().setInteger(1, forKey: "CurrentLevel")
-                //                }
                 let mainMenu = MainMenuScene(fileNamed: "MainMenuScene")
                 mainMenu!.scaleMode = .AspectFit
                 self.view?.presentScene(mainMenu!, transition:SKTransition.fadeWithColor(UIColor.orangeColor(), duration: NSTimeInterval(1.5)))
@@ -124,7 +118,7 @@ class CountyLine: SKScene, SKPhysicsContactDelegate {
                 spawner = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(2.5, secNum: 6)), target: self, selector: #selector(Level1.spawnLowObstacles), userInfo: nil, repeats: true)
                 spawner2 = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(2.5, secNum: 6)), target: self, selector: #selector(Level1.spawnHighObstacles), userInfo: nil, repeats: true)
                 
-                counter = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(1.3), target: self, selector: #selector(Level1.incrementScore),userInfo: nil, repeats: true)
+                //counter = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(1.3), target: self, selector: #selector(Level1.incrementScore),userInfo: nil, repeats: true)
             }
         }
     }
@@ -149,7 +143,7 @@ class CountyLine: SKScene, SKPhysicsContactDelegate {
             }
             
         }
-        if firstBody.node?.name == "Player" && secondBody.node?.name == "Bomb" {
+        if firstBody.node?.name == "Player" && secondBody.node?.name == "knife" {
             secondBody.node?.physicsBody?.affectedByGravity = true
             secondBody.node?.physicsBody?.mass = 0.1
             playerDied()
@@ -162,6 +156,12 @@ class CountyLine: SKScene, SKPhysicsContactDelegate {
             secondBody.node?.removeFromParent()
             player.runAction(SKAction.playSoundFileNamed("Coin.wav", waitForCompletion: false))
         }
+        if firstBody.node?.name == "Player" && secondBody.node?.name == "Donuts" {
+            secondBody.node?.removeFromParent()
+            player.runAction(SKAction.playSoundFileNamed("Coin.wav", waitForCompletion: false))
+            incrementScore()
+        }
+        
     }
     
     func didEndContact(contact: SKPhysicsContact) {
@@ -215,12 +215,12 @@ class CountyLine: SKScene, SKPhysicsContactDelegate {
         createHighObstacles()
         getLabel()
         
-        spawner = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(2, secNum: 4)), target: self, selector: #selector(Level1.spawnLowObstacles), userInfo: nil, repeats: true)
+        spawner = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(2, secNum: 5)), target: self, selector: #selector(Level1.spawnLowObstacles), userInfo: nil, repeats: true)
         
-        spawner2 = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(4, secNum: 8)), target: self, selector: #selector(Level1.spawnHighObstacles), userInfo: nil, repeats: true)
+        spawner2 = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(2, secNum: 8)), target: self, selector: #selector(Level1.spawnHighObstacles), userInfo: nil, repeats: true)
         
         
-        counter = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(1.3), target: self, selector: #selector(Level1.incrementScore),userInfo: nil, repeats: true)
+        //counter = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(1.3), target: self, selector: #selector(Level1.incrementScore),userInfo: nil, repeats: true)
     }
     
     func createPlayer() {
@@ -250,21 +250,21 @@ class CountyLine: SKScene, SKPhysicsContactDelegate {
     
     func createHighObstacles() {
         
-        let obstacle1 = SKSpriteNode(imageNamed:"Bomb")
-        obstacle1.name = "Bomb"
+        let obstacle1 = SKSpriteNode(imageNamed:"knife")
+        obstacle1.name = "knife"
         obstacle1.setScale(0.4)
         
         highObstacles.append(obstacle1)
         
         
-        let obstacle2 = SKSpriteNode(imageNamed:"Water")
-        obstacle2.name = "Water"
+        let obstacle2 = SKSpriteNode(imageNamed:"Donuts")
+        obstacle2.name = "Donuts"
         obstacle2.setScale(1)
         
         highObstacles.append(obstacle2)
         
         let obstacle3 = SKSpriteNode(imageNamed:"Donuts")
-        obstacle3.name = "Water"
+        obstacle3.name = "Donuts"
         obstacle3.setScale(1)
         
         highObstacles.append(obstacle3)
@@ -300,7 +300,7 @@ class CountyLine: SKScene, SKPhysicsContactDelegate {
         obstacle.runAction(sequence)
         
         spawner.invalidate()
-        spawner = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(2, secNum: 4)), target: self, selector: #selector(Level1.spawnLowObstacles), userInfo: nil, repeats: true)
+        spawner = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(2, secNum: 5)), target: self, selector: #selector(Level1.spawnLowObstacles), userInfo: nil, repeats: true)
         
         
         
@@ -319,11 +319,11 @@ class CountyLine: SKScene, SKPhysicsContactDelegate {
         
         let move = SKAction.moveToX(-(self.frame.size.width * 2), duration: NSTimeInterval(4))
         
-        if obstacle.name == "Bomb" {
+        if obstacle.name == "knife" {
             obstacle.physicsBody?.categoryBitMask = ColliderType.Obstacle
-            obstacle.position = CGPoint(x: self.frame.width + obstacle.size.width, y: 50)
+            obstacle.position = CGPoint(x: self.frame.width + obstacle.size.width, y: -30)
             obstacle.physicsBody?.affectedByGravity = false
-        }else if obstacle.name == "Water" {
+        }else if obstacle.name == "Donuts" {
             obstacle.physicsBody?.categoryBitMask = ColliderType.Collectible
             obstacle.position = CGPoint(x: self.frame.width + obstacle.size.width, y: 150)
             obstacle.physicsBody?.affectedByGravity = false
@@ -339,7 +339,7 @@ class CountyLine: SKScene, SKPhysicsContactDelegate {
         let sequence = SKAction.sequence([move,remove])
         obstacle.runAction(sequence)
         spawner2.invalidate()
-        spawner2 = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(4, secNum: 8)), target: self, selector: #selector(Level1.spawnHighObstacles), userInfo: nil, repeats: true)
+        spawner2 = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(2, secNum: 8)), target: self, selector: #selector(Level1.spawnHighObstacles), userInfo: nil, repeats: true)
     }
     
     func randomBetweenNumbers(firstNum:CGFloat, secNum: CGFloat) -> CGFloat{
@@ -358,17 +358,61 @@ class CountyLine: SKScene, SKPhysicsContactDelegate {
     
     func getLabel() {
         scoreLabel = self.childNodeWithName("Score Label") as! SKLabelNode
-        scoreLabel.text = "100M"
+        scoreLabel.text = "0"
         messageLabel = self.childNodeWithName("Message") as! SKLabelNode
-        messageLabel.text = "Survive for 100 meters"
+        messageLabel.text = "Collect 12 Dozen Donuts"
         livesLabel = self.childNodeWithName("Lives Label") as! SKLabelNode
         livesLabel.text = "\(lives)"
     }
     
     func incrementScore() {
-        score -= 1
-        scoreLabel.text = "\(score)M"
+        score += 1
+        scoreLabel.text = "\(score)"
+        if score >= 12 {
+            levelComplete()
+        }
     }
+    
+    func levelComplete() {
+        if levelsCompleted < 1 {
+            NSUserDefaults.standardUserDefaults().setInteger(1, forKey: "LevelsCompleted")
+            levelsCompleted = 1
+        }
+        if currentLevel < 1 {
+            NSUserDefaults.standardUserDefaults().setInteger(1, forKey: "CurrentLevel")
+            currentLevel = 1
+        }
+
+        
+        
+        self.scene?.paused = true
+        let completeLabel = SKLabelNode(fontNamed: "Road Rage")
+        completeLabel.text = "Level Complete"
+        completeLabel.fontSize = 100
+        completeLabel.fontColor = UIColor.redColor()
+        completeLabel.zPosition = 10
+        completeLabel.position = CGPoint(x: 0, y: 10)
+        self.addChild(completeLabel)
+        
+        let seconds = 1.5
+        let delay = seconds * Double(NSEC_PER_SEC)
+        let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+        dispatch_after(dispatchTime, dispatch_get_main_queue()) {
+            
+            let level = Capitol(fileNamed: "Capitol")
+            level!.scaleMode = .AspectFit
+            self.view?.presentScene(level!, transition:SKTransition.fadeWithColor(UIColor.greenColor(), duration: NSTimeInterval(1.5)))
+            
+            
+        }
+        
+        
+        
+    }
+    
+    
+    
+    
     func createPausePanel() {
         spawner.invalidate()
         spawner2.invalidate()

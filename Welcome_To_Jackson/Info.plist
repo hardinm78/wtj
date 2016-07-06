@@ -41,5 +41,7 @@
 	<array>
 		<string>Road_Rage.otf</string>
 	</array>
+	<key>CFBundleDisplayName</key>
+	<string>W2J</string>
 </dict>
 </plist>

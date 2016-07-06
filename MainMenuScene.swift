@@ -57,6 +57,19 @@ class MainMenuScene:SKScene {
             let level = Capitol(fileNamed: "Capitol")
             level?.scaleMode = .AspectFit
             self.view?.presentScene(level!, transition: SKTransition.fadeWithColor(UIColor.greenColor(), duration: NSTimeInterval(1.5)))
+        case 2:
+            let level = Ridgewood(fileNamed: "Ridgewood")
+            level?.scaleMode = .AspectFit
+            self.view?.presentScene(level!, transition: SKTransition.fadeWithColor(UIColor.greenColor(), duration: NSTimeInterval(1.5)))
+        case 3:
+            let level = High(fileNamed: "High")
+            level?.scaleMode = .AspectFit
+            self.view?.presentScene(level!, transition: SKTransition.fadeWithColor(UIColor.greenColor(), duration: NSTimeInterval(1.5)))
+        case 4:
+            let level = State(fileNamed: "State")
+            level?.scaleMode = .AspectFit
+            self.view?.presentScene(level!, transition: SKTransition.fadeWithColor(UIColor.greenColor(), duration: NSTimeInterval(1.5)))
+            
         default:
             break
             
@@ -124,11 +137,11 @@ class MainMenuScene:SKScene {
     }
     func createGrounds() {
         for i in 0...2 {
-            let g = SKSpriteNode(imageNamed: "Ground2")
+            let g = SKSpriteNode(imageNamed: "rd4x")
             g.name = "Ground"
             g.anchorPoint = CGPoint(x: 0.5, y: 0.5)
             
-            g.position = CGPoint(x: CGFloat(i) * g.size.width, y: -(self.frame.size.height/2))
+            g.position = CGPoint(x: CGFloat(i) * g.size.width, y: -(self.frame.size.height/2) + 50)
             g.zPosition = 3
             
             self.addChild(g)
@@ -137,7 +150,7 @@ class MainMenuScene:SKScene {
     func moveBackgroundsAndGrounds() {
         
         enumerateChildNodesWithName("BG",usingBlock: ({ (node, error) in
-            node.position.x -= 4
+            node.position.x -= 2
             
             let bgNode = node as! SKSpriteNode
             
@@ -147,7 +160,7 @@ class MainMenuScene:SKScene {
         }))
         
         enumerateChildNodesWithName("Ground",usingBlock: ({ (node, error) in
-            node.position.x -= 2
+            node.position.x -= 4
             
             let gNode = node as! SKSpriteNode
             
@@ -174,8 +187,8 @@ class MainMenuScene:SKScene {
     func getLogo() {
         title = childNodeWithName("Title") as! SKSpriteNode
         
-        let moveUp = SKAction.moveToY(title.position.y + 10, duration: NSTimeInterval(1))
-        let moveDown = SKAction.moveToY(title.position.y - 10, duration: NSTimeInterval(1))
+        let moveUp = SKAction.moveToY(title.position.y + 10, duration: NSTimeInterval(2))
+        let moveDown = SKAction.moveToY(title.position.y - 10, duration: NSTimeInterval(2))
         
         let sequence = SKAction.sequence([moveUp,moveDown])
         

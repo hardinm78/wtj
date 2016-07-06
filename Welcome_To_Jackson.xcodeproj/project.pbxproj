@@ -13,6 +13,8 @@
 		8E1DD67F1D256DE80027A941 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1DD67E1D256DE80027A941 /* Constants.swift */; };
 		8E1DD6811D257BEA0027A941 /* Capitol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1DD6801D257BEA0027A941 /* Capitol.swift */; };
 		8E1DD6831D257C5D0027A941 /* Capitol.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8E1DD6821D257C5D0027A941 /* Capitol.sks */; };
+		8E305EA81D2BF01C009DE34A /* Ridgewood.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E305EA71D2BF01C009DE34A /* Ridgewood.swift */; };
+		8E305EAA1D2BF054009DE34A /* Ridgewood.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8E305EA91D2BF054009DE34A /* Ridgewood.sks */; };
 		8E4D3DC51D1C72AA0038FE72 /* HappyVintageBeat.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8E4D3DC41D1C72AA0038FE72 /* HappyVintageBeat.wav */; };
 		8E7601F51D1B317F00228445 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7601F41D1B317F00228445 /* AppDelegate.swift */; };
 		8E7601FB1D1B317F00228445 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7601FA1D1B317F00228445 /* GameViewController.swift */; };
@@ -31,6 +33,24 @@
 		8EB97DF51D21AA4100605EDE /* OptionsScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8EB97DF41D21AA4100605EDE /* OptionsScene.sks */; };
 		8EB97DF71D22DD8800605EDE /* Death.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8EB97DF61D22DD8800605EDE /* Death.mp3 */; };
 		8EB97DF91D22DF7900605EDE /* Coin.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8EB97DF81D22DF7900605EDE /* Coin.wav */; };
+		8ECF7B441D2D5630007BB40B /* High.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECF7B431D2D5630007BB40B /* High.swift */; };
+		8ECF7B461D2D563C007BB40B /* High.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8ECF7B451D2D563C007BB40B /* High.sks */; };
+		8ECF7B481D2D6171007BB40B /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECF7B471D2D6171007BB40B /* State.swift */; };
+		8ECF7B4A1D2D617B007BB40B /* State.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8ECF7B491D2D617B007BB40B /* State.sks */; };
+		8ECF7B4C1D2D96B2007BB40B /* Terry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECF7B4B1D2D96B2007BB40B /* Terry.swift */; };
+		8ECF7B4E1D2D96C7007BB40B /* Fortification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECF7B4D1D2D96C7007BB40B /* Fortification.swift */; };
+		8ECF7B501D2D96F5007BB40B /* McDowell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECF7B4F1D2D96F5007BB40B /* McDowell.swift */; };
+		8ECF7B521D2D9710007BB40B /* Ellis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECF7B511D2D9710007BB40B /* Ellis.swift */; };
+		8ECF7B541D2D972B007BB40B /* WoodrowWilson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECF7B531D2D972B007BB40B /* WoodrowWilson.swift */; };
+		8ECF7B561D2D9744007BB40B /* OldCanton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECF7B551D2D9744007BB40B /* OldCanton.swift */; };
+		8ECF7B581D2D975C007BB40B /* Lakeland.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECF7B571D2D975C007BB40B /* Lakeland.swift */; };
+		8ECF7B5A1D2D9784007BB40B /* Terry.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8ECF7B591D2D9784007BB40B /* Terry.sks */; };
+		8ECF7B5C1D2D9794007BB40B /* Fortification.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8ECF7B5B1D2D9794007BB40B /* Fortification.sks */; };
+		8ECF7B5E1D2D979E007BB40B /* McDowell.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8ECF7B5D1D2D979E007BB40B /* McDowell.sks */; };
+		8ECF7B601D2D97A9007BB40B /* Ellis.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8ECF7B5F1D2D97A9007BB40B /* Ellis.sks */; };
+		8ECF7B621D2D97B6007BB40B /* WoodrowWilson.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8ECF7B611D2D97B6007BB40B /* WoodrowWilson.sks */; };
+		8ECF7B641D2D97C2007BB40B /* OldCanton.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8ECF7B631D2D97C2007BB40B /* OldCanton.sks */; };
+		8ECF7B661D2D97CE007BB40B /* Lakeland.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8ECF7B651D2D97CE007BB40B /* Lakeland.sks */; };
 		8EFBD4591D1D8F5300E209D3 /* MainMenuScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8EFBD4581D1D8F5300E209D3 /* MainMenuScene.sks */; };
 		8EFBD45B1D1D8F8D00E209D3 /* MainMenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFBD45A1D1D8F8D00E209D3 /* MainMenuScene.swift */; };
 /* End PBXBuildFile section */
@@ -42,6 +62,8 @@
 		8E1DD67E1D256DE80027A941 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		8E1DD6801D257BEA0027A941 /* Capitol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Capitol.swift; sourceTree = "<group>"; };
 		8E1DD6821D257C5D0027A941 /* Capitol.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Capitol.sks; sourceTree = "<group>"; };
+		8E305EA71D2BF01C009DE34A /* Ridgewood.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ridgewood.swift; sourceTree = "<group>"; };
+		8E305EA91D2BF054009DE34A /* Ridgewood.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Ridgewood.sks; sourceTree = "<group>"; };
 		8E4D3DC41D1C72AA0038FE72 /* HappyVintageBeat.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = HappyVintageBeat.wav; sourceTree = "<group>"; };
 		8E7601F11D1B317F00228445 /* Welcome_To_Jackson.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Welcome_To_Jackson.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E7601F41D1B317F00228445 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -62,6 +84,24 @@
 		8EB97DF41D21AA4100605EDE /* OptionsScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = OptionsScene.sks; sourceTree = "<group>"; };
 		8EB97DF61D22DD8800605EDE /* Death.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Death.mp3; sourceTree = "<group>"; };
 		8EB97DF81D22DF7900605EDE /* Coin.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Coin.wav; sourceTree = "<group>"; };
+		8ECF7B431D2D5630007BB40B /* High.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = High.swift; sourceTree = "<group>"; };
+		8ECF7B451D2D563C007BB40B /* High.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = High.sks; sourceTree = "<group>"; };
+		8ECF7B471D2D6171007BB40B /* State.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
+		8ECF7B491D2D617B007BB40B /* State.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = State.sks; sourceTree = "<group>"; };
+		8ECF7B4B1D2D96B2007BB40B /* Terry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Terry.swift; sourceTree = "<group>"; };
+		8ECF7B4D1D2D96C7007BB40B /* Fortification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fortification.swift; sourceTree = "<group>"; };
+		8ECF7B4F1D2D96F5007BB40B /* McDowell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = McDowell.swift; sourceTree = "<group>"; };
+		8ECF7B511D2D9710007BB40B /* Ellis.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ellis.swift; sourceTree = "<group>"; };
+		8ECF7B531D2D972B007BB40B /* WoodrowWilson.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WoodrowWilson.swift; sourceTree = "<group>"; };
+		8ECF7B551D2D9744007BB40B /* OldCanton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OldCanton.swift; sourceTree = "<group>"; };
+		8ECF7B571D2D975C007BB40B /* Lakeland.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lakeland.swift; sourceTree = "<group>"; };
+		8ECF7B591D2D9784007BB40B /* Terry.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Terry.sks; sourceTree = "<group>"; };
+		8ECF7B5B1D2D9794007BB40B /* Fortification.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Fortification.sks; sourceTree = "<group>"; };
+		8ECF7B5D1D2D979E007BB40B /* McDowell.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = McDowell.sks; sourceTree = "<group>"; };
+		8ECF7B5F1D2D97A9007BB40B /* Ellis.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Ellis.sks; sourceTree = "<group>"; };
+		8ECF7B611D2D97B6007BB40B /* WoodrowWilson.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = WoodrowWilson.sks; sourceTree = "<group>"; };
+		8ECF7B631D2D97C2007BB40B /* OldCanton.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = OldCanton.sks; sourceTree = "<group>"; };
+		8ECF7B651D2D97CE007BB40B /* Lakeland.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Lakeland.sks; sourceTree = "<group>"; };
 		8EFBD4581D1D8F5300E209D3 /* MainMenuScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MainMenuScene.sks; sourceTree = "<group>"; };
 		8EFBD45A1D1D8F8D00E209D3 /* MainMenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuScene.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -135,6 +175,16 @@
 			children = (
 				8E7602491D1B33FE00228445 /* Level1.sks */,
 				8E1DD6761D25616C0027A941 /* CountyLine.sks */,
+				8E305EA91D2BF054009DE34A /* Ridgewood.sks */,
+				8ECF7B451D2D563C007BB40B /* High.sks */,
+				8ECF7B491D2D617B007BB40B /* State.sks */,
+				8ECF7B591D2D9784007BB40B /* Terry.sks */,
+				8ECF7B5B1D2D9794007BB40B /* Fortification.sks */,
+				8ECF7B5D1D2D979E007BB40B /* McDowell.sks */,
+				8ECF7B5F1D2D97A9007BB40B /* Ellis.sks */,
+				8ECF7B611D2D97B6007BB40B /* WoodrowWilson.sks */,
+				8ECF7B631D2D97C2007BB40B /* OldCanton.sks */,
+				8ECF7B651D2D97CE007BB40B /* Lakeland.sks */,
 				8EFBD4581D1D8F5300E209D3 /* MainMenuScene.sks */,
 				8EB97DEE1D21A9CA00605EDE /* LevelSelectScene.sks */,
 				8EB97DF41D21AA4100605EDE /* OptionsScene.sks */,
@@ -159,9 +209,19 @@
 		8E76024D1D1B4A8600228445 /* Scene Classes */ = {
 			isa = PBXGroup;
 			children = (
+				8E76024B1D1B346900228445 /* Level1.swift */,
 				8E1DD6781D2562280027A941 /* CountyLine.swift */,
 				8E1DD6801D257BEA0027A941 /* Capitol.swift */,
-				8E76024B1D1B346900228445 /* Level1.swift */,
+				8E305EA71D2BF01C009DE34A /* Ridgewood.swift */,
+				8ECF7B431D2D5630007BB40B /* High.swift */,
+				8ECF7B471D2D6171007BB40B /* State.swift */,
+				8ECF7B4B1D2D96B2007BB40B /* Terry.swift */,
+				8ECF7B4D1D2D96C7007BB40B /* Fortification.swift */,
+				8ECF7B4F1D2D96F5007BB40B /* McDowell.swift */,
+				8ECF7B511D2D9710007BB40B /* Ellis.swift */,
+				8ECF7B531D2D972B007BB40B /* WoodrowWilson.swift */,
+				8ECF7B551D2D9744007BB40B /* OldCanton.swift */,
+				8ECF7B571D2D975C007BB40B /* Lakeland.swift */,
 				8EFBD45A1D1D8F8D00E209D3 /* MainMenuScene.swift */,
 				8EB97DF01D21A9E000605EDE /* LevelSelectScene.swift */,
 				8EB97DF21D21AA0600605EDE /* OptionsScene.swift */,
@@ -240,15 +300,25 @@
 				8E7602241D1B31FF00228445 /* Jump.wav in Resources */,
 				8EFBD4591D1D8F5300E209D3 /* MainMenuScene.sks in Resources */,
 				8EB97DF51D21AA4100605EDE /* OptionsScene.sks in Resources */,
+				8E305EAA1D2BF054009DE34A /* Ridgewood.sks in Resources */,
+				8ECF7B5A1D2D9784007BB40B /* Terry.sks in Resources */,
 				8EB97DF71D22DD8800605EDE /* Death.mp3 in Resources */,
+				8ECF7B641D2D97C2007BB40B /* OldCanton.sks in Resources */,
+				8ECF7B461D2D563C007BB40B /* High.sks in Resources */,
 				8EB97DEF1D21A9CA00605EDE /* LevelSelectScene.sks in Resources */,
 				8E4D3DC51D1C72AA0038FE72 /* HappyVintageBeat.wav in Resources */,
+				8ECF7B621D2D97B6007BB40B /* WoodrowWilson.sks in Resources */,
+				8ECF7B4A1D2D617B007BB40B /* State.sks in Resources */,
 				8E7602031D1B317F00228445 /* LaunchScreen.storyboard in Resources */,
+				8ECF7B661D2D97CE007BB40B /* Lakeland.sks in Resources */,
 				8E7602001D1B317F00228445 /* Assets.xcassets in Resources */,
 				8E1DD6831D257C5D0027A941 /* Capitol.sks in Resources */,
+				8ECF7B601D2D97A9007BB40B /* Ellis.sks in Resources */,
 				8E76024A1D1B33FE00228445 /* Level1.sks in Resources */,
 				8E7601FE1D1B317F00228445 /* Main.storyboard in Resources */,
 				8E1DD6771D25616C0027A941 /* CountyLine.sks in Resources */,
+				8ECF7B5E1D2D979E007BB40B /* McDowell.sks in Resources */,
+				8ECF7B5C1D2D9794007BB40B /* Fortification.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -263,14 +333,24 @@
 				8E936D3A1D1EF65C005F726D /* AudioManager.swift in Sources */,
 				8E1DD67F1D256DE80027A941 /* Constants.swift in Sources */,
 				8EB97DF11D21A9E000605EDE /* LevelSelectScene.swift in Sources */,
+				8ECF7B521D2D9710007BB40B /* Ellis.swift in Sources */,
 				8E1DD6791D2562280027A941 /* CountyLine.swift in Sources */,
+				8ECF7B441D2D5630007BB40B /* High.swift in Sources */,
 				8EFBD45B1D1D8F8D00E209D3 /* MainMenuScene.swift in Sources */,
 				8E7602501D1B4AB200228445 /* Player.swift in Sources */,
+				8ECF7B481D2D6171007BB40B /* State.swift in Sources */,
 				8E76024C1D1B346900228445 /* Level1.swift in Sources */,
+				8ECF7B561D2D9744007BB40B /* OldCanton.swift in Sources */,
+				8ECF7B541D2D972B007BB40B /* WoodrowWilson.swift in Sources */,
 				8E7601FB1D1B317F00228445 /* GameViewController.swift in Sources */,
+				8ECF7B4E1D2D96C7007BB40B /* Fortification.swift in Sources */,
+				8ECF7B581D2D975C007BB40B /* Lakeland.swift in Sources */,
+				8ECF7B501D2D96F5007BB40B /* McDowell.swift in Sources */,
 				8E7601F51D1B317F00228445 /* AppDelegate.swift in Sources */,
+				8ECF7B4C1D2D96B2007BB40B /* Terry.swift in Sources */,
 				8EB97DF31D21AA0600605EDE /* OptionsScene.swift in Sources */,
 				8E1DD67D1D2568C30027A941 /* BGAndGround.swift in Sources */,
+				8E305EA81D2BF01C009DE34A /* Ridgewood.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -28,7 +28,7 @@ class Player:SKSpriteNode {
         self.name = "Player"
         self.zPosition = 4
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        self.setScale(0.5)
+        self.setScale(0.45)
         self.physicsBody = SKPhysicsBody(rectangleOfSize: CGSize(width: self.size.width-50, height: self.size.height-20))
         self.physicsBody?.mass = 1
         self.physicsBody?.affectedByGravity = true
@@ -44,7 +44,7 @@ class Player:SKSpriteNode {
         }
     func jump() {
         self.physicsBody!.velocity = CGVector(dx: 0, dy:0)
-        self.physicsBody?.applyImpulse(CGVector(dx: 15, dy: 1040))
+        self.physicsBody?.applyImpulse(CGVector(dx: 15, dy: 1200))
         
         var jumping = [SKTexture]()
         
@@ -53,7 +53,7 @@ class Player:SKSpriteNode {
             jumping.append(SKTexture(imageNamed:name))
         }
         
-        let jumpAnimation = SKAction.animateWithTextures(jumping, timePerFrame: NSTimeInterval(0.03), resize: true, restore: true)
+        let jumpAnimation = SKAction.animateWithTextures(jumping, timePerFrame: NSTimeInterval(0.04), resize: true, restore: true)
         self.runAction(jumpAnimation)
 
         print("jumped")
@@ -77,11 +77,11 @@ class Player:SKSpriteNode {
         
         
         
-        let duckAnimation = SKAction.animateWithTextures(duck, timePerFrame: NSTimeInterval(0.017), resize: true, restore: true)
+        let duckAnimation = SKAction.animateWithTextures(duck, timePerFrame: NSTimeInterval(0.01), resize: true, restore: true)
         self.runAction(duckAnimation)
         
         self.physicsBody = SKPhysicsBody(rectangleOfSize: CGSize(width: 250, height: 50),center: CGPoint(x: 0, y: -120))
-        
+        self.physicsBody!.mass = 0.5
         
         let seconds = 0.5
         let delay = seconds * Double(NSEC_PER_SEC)

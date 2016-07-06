@@ -1,5 +1,5 @@
 //
-//  Capitol.swift
+//  CountyLine.swift
 //  Welcome_To_Jackson
 //
 //  Created by Michael Hardin on 6/30/16.
@@ -8,8 +8,7 @@
 
 import SpriteKit
 
-
-class Capitol:SKScene, SKPhysicsContactDelegate {
+class Fortification: SKScene, SKPhysicsContactDelegate {
     
     var BG = BGAndGround()
     var player = Player()
@@ -29,8 +28,6 @@ class Capitol:SKScene, SKPhysicsContactDelegate {
     var spawner2 = NSTimer()
     var counter = NSTimer()
     var lives = 0
-    
-    
     
     
     override func didMoveToView(view: SKView) {
@@ -65,7 +62,7 @@ class Capitol:SKScene, SKPhysicsContactDelegate {
             let location = touch.locationInNode(self)
             
             if nodeAtPoint(location).name == "Restart" {
-                let level = Capitol(fileNamed: "Capitol")
+                let level = Ridgewood(fileNamed: "Ridgewood")
                 level!.scaleMode = .AspectFit
                 self.view?.presentScene(level!, transition:SKTransition.fadeWithColor(UIColor.greenColor(), duration: NSTimeInterval(1.5)))
             }
@@ -99,12 +96,12 @@ class Capitol:SKScene, SKPhysicsContactDelegate {
                 spawner2.invalidate()
                 counter.invalidate()
                 
-                if levelsCompleted < 2 {
-                    NSUserDefaults.standardUserDefaults().setInteger(2, forKey: "LevelsCompleted")
+                if levelsCompleted < 3 {
+                    NSUserDefaults.standardUserDefaults().setInteger(3, forKey: "LevelsCompleted")
                 }
-                //                if currentLevel < 1 {
-                //                    NSUserDefaults.standardUserDefaults().setInteger(1, forKey: "CurrentLevel")
-                //                }
+//                                if currentLevel < 3 {
+//                                    NSUserDefaults.standardUserDefaults().setInteger(3, forKey: "CurrentLevel")
+//                                }
                 let mainMenu = MainMenuScene(fileNamed: "MainMenuScene")
                 mainMenu!.scaleMode = .AspectFit
                 self.view?.presentScene(mainMenu!, transition:SKTransition.fadeWithColor(UIColor.orangeColor(), duration: NSTimeInterval(1.5)))
@@ -344,7 +341,7 @@ class Capitol:SKScene, SKPhysicsContactDelegate {
         spawner2.invalidate()
         spawner2 = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(4, secNum: 8)), target: self, selector: #selector(Level1.spawnHighObstacles), userInfo: nil, repeats: true)
     }
-
+    
     func randomBetweenNumbers(firstNum:CGFloat, secNum: CGFloat) -> CGFloat{
         let rNum = CGFloat(arc4random()) / CGFloat(UINT32_MAX) * abs(firstNum - secNum) + min(firstNum, secNum)
         print(rNum)
@@ -371,52 +368,7 @@ class Capitol:SKScene, SKPhysicsContactDelegate {
     func incrementScore() {
         score -= 1
         scoreLabel.text = "\(score)M"
-        if score <= 0 {
-            counter.invalidate()
-            levelComplete()
-        }
     }
-    
-    func levelComplete() {
-        if levelsCompleted < 2 {
-            NSUserDefaults.standardUserDefaults().setInteger(2, forKey: "LevelsCompleted")
-            levelsCompleted = 2
-        }
-        if currentLevel < 2 {
-            NSUserDefaults.standardUserDefaults().setInteger(2, forKey: "CurrentLevel")
-            currentLevel = 2
-        }
-        
-        
-        
-        self.scene?.paused = true
-        let completeLabel = SKLabelNode(fontNamed: "Road Rage")
-        completeLabel.text = "Level Complete"
-        completeLabel.fontSize = 100
-        completeLabel.fontColor = UIColor.redColor()
-        completeLabel.zPosition = 10
-        completeLabel.position = CGPoint(x: 0, y: 10)
-        self.addChild(completeLabel)
-        
-        let seconds = 1.5
-        let delay = seconds * Double(NSEC_PER_SEC)
-        let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
-        dispatch_after(dispatchTime, dispatch_get_main_queue()) {
-            
-            let level = Ridgewood(fileNamed: "Ridgewood")
-            level!.scaleMode = .AspectFit
-            self.view?.presentScene(level!, transition:SKTransition.fadeWithColor(UIColor.greenColor(), duration: NSTimeInterval(1.5)))
-            
-            
-        }
-        
-        
-        
-    }
-
-    
-    
-    
     func createPausePanel() {
         spawner.invalidate()
         spawner2.invalidate()
@@ -485,7 +437,6 @@ class Capitol:SKScene, SKPhysicsContactDelegate {
                     child.removeFromParent()
                 }
             }
-
             
             dead.physicsBody?.dynamic = false
             dead.removeFromParent()
