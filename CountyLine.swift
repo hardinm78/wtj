@@ -246,6 +246,13 @@ class CountyLine: SKScene, SKPhysicsContactDelegate {
         
         lowObstacles.append(obstacle2)
         
+        let obstacle3 = SKSpriteNode(imageNamed:"Donuts")
+        obstacle3.name = "Donuts"
+        obstacle3.setScale(1)
+        
+        
+        lowObstacles.append(obstacle3)
+        
     }
     
     func createHighObstacles() {
@@ -284,14 +291,15 @@ class CountyLine: SKScene, SKPhysicsContactDelegate {
         
         let move = SKAction.moveToX(-(self.frame.size.width * 2), duration: NSTimeInterval(7))
         
-        if index == 0{
+        if obstacle.name == "Pothole"{
             obstacle.position = CGPoint(x: self.frame.width + obstacle.size.width, y: -340)
             obstacle.physicsBody?.dynamic = false
-        }else if index == 1{
+        }else if obstacle.name == "Barrel"{
             obstacle.position = CGPoint(x: self.frame.width + obstacle.size.width, y: -200)
             obstacle.physicsBody?.dynamic = false
-        }else {
-            
+        }else if obstacle.name == "Donuts"{
+            obstacle.position = CGPoint(x: self.frame.width + obstacle.size.width, y: -300)
+            obstacle.physicsBody?.dynamic = false
         }
         self.addChild(obstacle)
         
@@ -369,7 +377,9 @@ class CountyLine: SKScene, SKPhysicsContactDelegate {
         score += 1
         scoreLabel.text = "\(score)"
         if score >= 12 {
+            
             levelComplete()
+            
         }
     }
     
@@ -383,9 +393,9 @@ class CountyLine: SKScene, SKPhysicsContactDelegate {
             currentLevel = 1
         }
 
+        player.runAction(SKAction.playSoundFileNamed("woohoo.mp3", waitForCompletion: false))
         
-        
-        self.scene?.paused = true
+        //self.scene?.paused = true
         let completeLabel = SKLabelNode(fontNamed: "Road Rage")
         completeLabel.text = "Level Complete"
         completeLabel.fontSize = 100
@@ -394,7 +404,7 @@ class CountyLine: SKScene, SKPhysicsContactDelegate {
         completeLabel.position = CGPoint(x: 0, y: 10)
         self.addChild(completeLabel)
         
-        let seconds = 1.5
+        let seconds = 1.0
         let delay = seconds * Double(NSEC_PER_SEC)
         let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
         dispatch_after(dispatchTime, dispatch_get_main_queue()) {
@@ -477,7 +487,7 @@ class CountyLine: SKScene, SKPhysicsContactDelegate {
         dispatch_after(dispatchTime, dispatch_get_main_queue()) {
             
             for child in self.children {
-                if child.name == "Pothole" || child.name == "Bomb" || child.name == "Barrel" || child.name == "Water" {
+                if child.name == "Pothole" || child.name == "Bomb" || child.name == "Barrel" || child.name == "Donuts" {
                     child.removeFromParent()
                 }
             }

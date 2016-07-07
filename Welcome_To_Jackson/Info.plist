@@ -43,5 +43,10 @@
 	</array>
 	<key>CFBundleDisplayName</key>
 	<string>W2J</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 </dict>
 </plist>

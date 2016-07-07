@@ -153,17 +153,26 @@ class Capitol:SKScene, SKPhysicsContactDelegate {
             
         }
         if firstBody.node?.name == "Player" && secondBody.node?.name == "Bomb" {
-            secondBody.node?.physicsBody?.affectedByGravity = true
-            secondBody.node?.physicsBody?.mass = 0.1
+            let explosion = SKEmitterNode(fileNamed: "explosion")
+            self.runAction(SKAction.playSoundFileNamed("explosion.wav", waitForCompletion: false))
+            
+            explosion?.position = (secondBody.node?.position)!
+            secondBody.node?.removeFromParent()
+            explosion?.zPosition = 10
+            self.addChild(explosion!)
+            
             playerDied()
         }
         
         if firstBody.node?.name == "Player" && secondBody.node?.name == "Pothole" {
+            self.runAction(SKAction.playSoundFileNamed("Death.mp3", waitForCompletion: false))
             playerDied()
         }
         if firstBody.node?.name == "Player" && secondBody.node?.name == "Water" {
             secondBody.node?.removeFromParent()
             player.runAction(SKAction.playSoundFileNamed("Coin.wav", waitForCompletion: false))
+            score -= 5
+            scoreLabel.text = "\(score)M"
         }
     }
     
@@ -266,11 +275,7 @@ class Capitol:SKScene, SKPhysicsContactDelegate {
         
         highObstacles.append(obstacle2)
         
-        let obstacle3 = SKSpriteNode(imageNamed:"Donuts")
-        obstacle3.name = "Water"
-        obstacle3.setScale(1)
         
-        highObstacles.append(obstacle3)
         
     }
     func spawnLowObstacles() {
@@ -330,10 +335,6 @@ class Capitol:SKScene, SKPhysicsContactDelegate {
             obstacle.physicsBody?.categoryBitMask = ColliderType.Collectible
             obstacle.position = CGPoint(x: self.frame.width + obstacle.size.width, y: 150)
             obstacle.physicsBody?.affectedByGravity = false
-        }else if obstacle.name == "Donuts" {
-            obstacle.physicsBody?.categoryBitMask = ColliderType.Collectible
-            obstacle.position = CGPoint(x: self.frame.width + obstacle.size.width, y: 150)
-            obstacle.physicsBody?.affectedByGravity = false
         }
         
         self.addChild(obstacle)
@@ -387,9 +388,9 @@ class Capitol:SKScene, SKPhysicsContactDelegate {
             currentLevel = 2
         }
         
+        player.runAction(SKAction.playSoundFileNamed("woohoo.mp3", waitForCompletion: false))
         
-        
-        self.scene?.paused = true
+        //self.scene?.paused = true
         let completeLabel = SKLabelNode(fontNamed: "Road Rage")
         completeLabel.text = "Level Complete"
         completeLabel.fontSize = 100
@@ -463,7 +464,7 @@ class Capitol:SKScene, SKPhysicsContactDelegate {
         dead.physicsBody!.mass = 0.5
         dead.physicsBody?.dynamic = true
         dead.physicsBody?.allowsRotation = true
-        dead.runAction(SKAction.playSoundFileNamed("Death.mp3", waitForCompletion: false))
+        //dead.runAction(SKAction.playSoundFileNamed("Death.mp3", waitForCompletion: false))
         dead.alpha = 0.5
         player.removeFromParent()
         
