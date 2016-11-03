@@ -1,0 +1,6 @@
+framework module Pods_Welcome_To_Jackson {
+  umbrella header "Pods-Welcome_To_Jackson-umbrella.h"
+
+  export *
+  module * { export * }
+}

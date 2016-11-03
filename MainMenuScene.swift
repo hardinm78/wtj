@@ -8,7 +8,7 @@
 
 import SpriteKit
 
-  var isMusicPlaying = false
+  var isMusicPlaying = true
 
 
 
@@ -29,7 +29,7 @@ class MainMenuScene:SKScene {
     override func didMoveToView(view: SKView) {
        
         
-        highScore = NSUserDefaults().integerForKey("Highscore")
+        
         levelsCompleted = NSUserDefaults().integerForKey("LevelsCompleted")
         currentLevel = NSUserDefaults().integerForKey("CurrentLevel")
         initialize()
@@ -68,8 +68,35 @@ class MainMenuScene:SKScene {
         case 4:
             let level = State(fileNamed: "State")
             level?.scaleMode = .AspectFit
+            self.view?.presentScene(level!, transition: SKTransition.fadeWithColor(UIColor.greenColor(), duration: NSTimeInterval(1.5)))            
+        case 5:
+            let level = Terry(fileNamed: "Terry")
+            level?.scaleMode = .AspectFit
             self.view?.presentScene(level!, transition: SKTransition.fadeWithColor(UIColor.greenColor(), duration: NSTimeInterval(1.5)))
-            
+        case 6:
+            let level = Fortification(fileNamed: "Fortification")
+            level?.scaleMode = .AspectFit
+            self.view?.presentScene(level!, transition: SKTransition.fadeWithColor(UIColor.greenColor(), duration: NSTimeInterval(1.5)))
+        case 7:
+            let level = McDowell(fileNamed: "McDowell")
+            level?.scaleMode = .AspectFit
+            self.view?.presentScene(level!, transition: SKTransition.fadeWithColor(UIColor.greenColor(), duration: NSTimeInterval(1.5)))
+        case 8:
+            let level = Ellis(fileNamed: "Ellis")
+            level?.scaleMode = .AspectFit
+            self.view?.presentScene(level!, transition: SKTransition.fadeWithColor(UIColor.greenColor(), duration: NSTimeInterval(1.5)))
+        case 9:
+            let level = WoodrowWilson(fileNamed: "WoodrowWilson")
+            level?.scaleMode = .AspectFit
+            self.view?.presentScene(level!, transition: SKTransition.fadeWithColor(UIColor.greenColor(), duration: NSTimeInterval(1.5)))
+        case 10:
+            let level = OldCanton(fileNamed: "OldCanton")
+            level?.scaleMode = .AspectFit
+            self.view?.presentScene(level!, transition: SKTransition.fadeWithColor(UIColor.greenColor(), duration: NSTimeInterval(1.5)))
+        case 11:
+            let level = Lakeland(fileNamed: "Lakeland")
+            level?.scaleMode = .AspectFit
+            self.view?.presentScene(level!, transition: SKTransition.fadeWithColor(UIColor.greenColor(), duration: NSTimeInterval(1.5)))
         default:
             break
             
@@ -112,10 +139,12 @@ class MainMenuScene:SKScene {
             if nodeAtPoint(location) == musicBtn {
                 if !isMusicPlaying{
                     isMusicPlaying = true
+                    NSUserDefaults.standardUserDefaults().setBool(true, forKey: "isMusicPlaying")
                     AudioManager.instance.playBGMusic()
                     musicBtn.texture = musicON
                 }else {
                     isMusicPlaying = false
+                    NSUserDefaults.standardUserDefaults().setBool(false, forKey: "isMusicPlaying")
                     AudioManager.instance.stopBGMusic()
                     musicBtn.texture = musicOFF
                 }
@@ -178,6 +207,7 @@ class MainMenuScene:SKScene {
         
         if isMusicPlaying {
             musicBtn.texture = musicON
+            
         }else {
             musicBtn.texture = musicOFF
         }
@@ -217,7 +247,7 @@ class MainMenuScene:SKScene {
         case 6:
             currentLvlLabel.texture = SKTexture(imageNamed: "Fortification")
         case 7:
-            currentLvlLabel.texture = SKTexture(imageNamed: "McDowell")
+            currentLvlLabel.texture = SKTexture(imageNamed: "McDowell Rd")
         case 8:
             currentLvlLabel.texture = SKTexture(imageNamed: "Ellis Ave")
         case 9:

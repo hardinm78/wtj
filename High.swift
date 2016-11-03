@@ -7,8 +7,9 @@
 //
 
 import SpriteKit
+import GoogleMobileAds
 
-class High: SKScene, SKPhysicsContactDelegate {
+class High:SKScene, SKPhysicsContactDelegate {
     
     var BG = BGAndGround()
     var player = Player()
@@ -30,12 +31,14 @@ class High: SKScene, SKPhysicsContactDelegate {
     var lives = 0
     
     
+    
+    
     override func didMoveToView(view: SKView) {
-        let swipeUp:UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(Level1.swipedUp(_:)))
+        let swipeUp:UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(self.swipedUp(_:)))
         swipeUp.direction = .Up
         view.addGestureRecognizer(swipeUp)
         
-        let swipeDown:UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(Level1.swipedDown(_:)))
+        let swipeDown:UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(self.swipedDown(_:)))
         swipeDown.direction = .Down
         view.addGestureRecognizer(swipeDown)
         
@@ -62,7 +65,7 @@ class High: SKScene, SKPhysicsContactDelegate {
             let location = touch.locationInNode(self)
             
             if nodeAtPoint(location).name == "Restart" {
-                let level = Ridgewood(fileNamed: "Ridgewood")
+                let level = High(fileNamed: "High")
                 level!.scaleMode = .AspectFit
                 self.view?.presentScene(level!, transition:SKTransition.fadeWithColor(UIColor.greenColor(), duration: NSTimeInterval(1.5)))
             }
@@ -78,30 +81,39 @@ class High: SKScene, SKPhysicsContactDelegate {
                 BG.createGrounds(self)
                 createPlayer()
                 
-                spawner = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(2, secNum: 4)), target: self, selector: #selector(Level1.spawnLowObstacles), userInfo: nil, repeats: true)
+                spawner = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(2, secNum: 4)), target: self, selector: #selector(self.spawnLowObstacles), userInfo: nil, repeats: true)
                 
-                spawner2 = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(4, secNum: 8)), target: self, selector: #selector(Level1.spawnHighObstacles), userInfo: nil, repeats: true)
+                spawner2 = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(4, secNum: 8)), target: self, selector: #selector(self.spawnHighObstacles), userInfo: nil, repeats: true)
                 
                 
-                counter = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(1.3), target: self, selector: #selector(Level1.incrementScore),userInfo: nil, repeats: true)
+                counter = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(1.3), target: self, selector: #selector(self.incrementScore),userInfo: nil, repeats: true)
             }
             
             
             
             if nodeAtPoint(location).name == "Quit" {
-                if highScore < score {
-                    NSUserDefaults.standardUserDefaults().setInteger(score, forKey: "Highscore")
-                }
+                
                 spawner.invalidate()
                 spawner2.invalidate()
                 counter.invalidate()
                 
-                if levelsCompleted < 4 {
-                    NSUserDefaults.standardUserDefaults().setInteger(4, forKey: "LevelsCompleted")
+                
+                if lives > 0 {
+                    if interstitial.isReady {
+                        let currentViewController:UIViewController=UIApplication.sharedApplication().keyWindow!.rootViewController!
+                        
+                        interstitial.presentFromRootViewController(currentViewController)
+                    } else {
+                        print("Ad wasn't ready")
+                    }
+                    
+                    interstitial = GADInterstitial(adUnitID: "ca-app-pub-6381417154543225/8624542790")
+                    let request = GADRequest()
+                    interstitial.loadRequest(request)
+                    
                 }
-//                                if currentLevel < 4 {
-//                                    NSUserDefaults.standardUserDefaults().setInteger(4, forKey: "CurrentLevel")
-//                                }
+                
+                
                 let mainMenu = MainMenuScene(fileNamed: "MainMenuScene")
                 mainMenu!.scaleMode = .AspectFit
                 self.view?.presentScene(mainMenu!, transition:SKTransition.fadeWithColor(UIColor.orangeColor(), duration: NSTimeInterval(1.5)))
@@ -121,10 +133,10 @@ class High: SKScene, SKPhysicsContactDelegate {
                 pausePanel.removeFromParent()
                 self.scene?.paused = false
                 
-                spawner = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(2.5, secNum: 6)), target: self, selector: #selector(Level1.spawnLowObstacles), userInfo: nil, repeats: true)
-                spawner2 = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(2.5, secNum: 6)), target: self, selector: #selector(Level1.spawnHighObstacles), userInfo: nil, repeats: true)
+                spawner = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(2.5, secNum: 6)), target: self, selector: #selector(self.spawnLowObstacles), userInfo: nil, repeats: true)
+                spawner2 = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(2.5, secNum: 6)), target: self, selector: #selector(self.spawnHighObstacles), userInfo: nil, repeats: true)
                 
-                counter = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(1.3), target: self, selector: #selector(Level1.incrementScore),userInfo: nil, repeats: true)
+                counter = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(1.3), target: self, selector: #selector(self.incrementScore),userInfo: nil, repeats: true)
             }
         }
     }
@@ -150,17 +162,26 @@ class High: SKScene, SKPhysicsContactDelegate {
             
         }
         if firstBody.node?.name == "Player" && secondBody.node?.name == "Bomb" {
-            secondBody.node?.physicsBody?.affectedByGravity = true
-            secondBody.node?.physicsBody?.mass = 0.1
+            let explosion = SKEmitterNode(fileNamed: "explosion")
+            self.runAction(SKAction.playSoundFileNamed("explosion.wav", waitForCompletion: false))
+            
+            explosion?.position = (secondBody.node?.position)!
+            secondBody.node?.removeFromParent()
+            explosion?.zPosition = 10
+            self.addChild(explosion!)
+            
             playerDied()
         }
         
         if firstBody.node?.name == "Player" && secondBody.node?.name == "Pothole" {
+            self.runAction(SKAction.playSoundFileNamed("Death.mp3", waitForCompletion: false))
             playerDied()
         }
-        if firstBody.node?.name == "Player" && secondBody.node?.name == "Water" {
+        if firstBody.node?.name == "Player" && secondBody.node?.name == "plus5" {
             secondBody.node?.removeFromParent()
             player.runAction(SKAction.playSoundFileNamed("Coin.wav", waitForCompletion: false))
+            score -= 5
+            scoreLabel.text = "\(score)M"
         }
     }
     
@@ -204,7 +225,7 @@ class High: SKScene, SKPhysicsContactDelegate {
     }
     
     func initialize() {
-        lives = 3
+        lives = 2
         physicsWorld.contactDelegate = self
         isAlive = true
         
@@ -215,12 +236,12 @@ class High: SKScene, SKPhysicsContactDelegate {
         createHighObstacles()
         getLabel()
         
-        spawner = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(2, secNum: 4)), target: self, selector: #selector(Level1.spawnLowObstacles), userInfo: nil, repeats: true)
+        spawner = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(2, secNum: 4)), target: self, selector: #selector(self.spawnLowObstacles), userInfo: nil, repeats: true)
         
-        spawner2 = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(4, secNum: 8)), target: self, selector: #selector(Level1.spawnHighObstacles), userInfo: nil, repeats: true)
+        spawner2 = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(4, secNum: 8)), target: self, selector: #selector(self.spawnHighObstacles), userInfo: nil, repeats: true)
         
         
-        counter = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(1.3), target: self, selector: #selector(Level1.incrementScore),userInfo: nil, repeats: true)
+        counter = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(1.3), target: self, selector: #selector(self.incrementScore),userInfo: nil, repeats: true)
     }
     
     func createPlayer() {
@@ -257,17 +278,13 @@ class High: SKScene, SKPhysicsContactDelegate {
         highObstacles.append(obstacle1)
         
         
-        let obstacle2 = SKSpriteNode(imageNamed:"Water")
-        obstacle2.name = "Water"
-        obstacle2.setScale(1)
+        let obstacle2 = SKSpriteNode(imageNamed:"plus5")
+        obstacle2.name = "plus5"
+        obstacle2.setScale(0.8)
         
         highObstacles.append(obstacle2)
         
-        let obstacle3 = SKSpriteNode(imageNamed:"Donuts")
-        obstacle3.name = "Water"
-        obstacle3.setScale(1)
         
-        highObstacles.append(obstacle3)
         
     }
     func spawnLowObstacles() {
@@ -285,6 +302,7 @@ class High: SKScene, SKPhysicsContactDelegate {
         let move = SKAction.moveToX(-(self.frame.size.width * 2), duration: NSTimeInterval(7))
         
         if index == 0{
+            obstacle.physicsBody = SKPhysicsBody(rectangleOfSize: CGSize(width: obstacle.size.width - 100, height: obstacle.size.height - 20))
             obstacle.position = CGPoint(x: self.frame.width + obstacle.size.width, y: -340)
             obstacle.physicsBody?.dynamic = false
         }else if index == 1{
@@ -300,7 +318,7 @@ class High: SKScene, SKPhysicsContactDelegate {
         obstacle.runAction(sequence)
         
         spawner.invalidate()
-        spawner = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(2, secNum: 4)), target: self, selector: #selector(Level1.spawnLowObstacles), userInfo: nil, repeats: true)
+        spawner = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(2, secNum: 4)), target: self, selector: #selector(self.spawnLowObstacles), userInfo: nil, repeats: true)
         
         
         
@@ -323,11 +341,7 @@ class High: SKScene, SKPhysicsContactDelegate {
             obstacle.physicsBody?.categoryBitMask = ColliderType.Obstacle
             obstacle.position = CGPoint(x: self.frame.width + obstacle.size.width, y: 50)
             obstacle.physicsBody?.affectedByGravity = false
-        }else if obstacle.name == "Water" {
-            obstacle.physicsBody?.categoryBitMask = ColliderType.Collectible
-            obstacle.position = CGPoint(x: self.frame.width + obstacle.size.width, y: 150)
-            obstacle.physicsBody?.affectedByGravity = false
-        }else if obstacle.name == "Donuts" {
+        }else if obstacle.name == "plus5" {
             obstacle.physicsBody?.categoryBitMask = ColliderType.Collectible
             obstacle.position = CGPoint(x: self.frame.width + obstacle.size.width, y: 150)
             obstacle.physicsBody?.affectedByGravity = false
@@ -339,7 +353,7 @@ class High: SKScene, SKPhysicsContactDelegate {
         let sequence = SKAction.sequence([move,remove])
         obstacle.runAction(sequence)
         spawner2.invalidate()
-        spawner2 = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(4, secNum: 8)), target: self, selector: #selector(Level1.spawnHighObstacles), userInfo: nil, repeats: true)
+        spawner2 = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(randomBetweenNumbers(4, secNum: 8)), target: self, selector: #selector(self.spawnHighObstacles), userInfo: nil, repeats: true)
     }
     
     func randomBetweenNumbers(firstNum:CGFloat, secNum: CGFloat) -> CGFloat{
@@ -362,13 +376,60 @@ class High: SKScene, SKPhysicsContactDelegate {
         messageLabel = self.childNodeWithName("Message") as! SKLabelNode
         messageLabel.text = "Survive for 100 meters"
         livesLabel = self.childNodeWithName("Lives Label") as! SKLabelNode
+        if lives >= 0 {
         livesLabel.text = "\(lives)"
+        }
     }
     
     func incrementScore() {
         score -= 1
         scoreLabel.text = "\(score)M"
+        if score <= 0 {
+            counter.invalidate()
+            levelComplete()
+        }
     }
+    
+    func levelComplete() {
+        if levelsCompleted < 4 {
+            NSUserDefaults.standardUserDefaults().setInteger(4, forKey: "LevelsCompleted")
+            levelsCompleted = 4
+        }
+        if currentLevel < 4 {
+            NSUserDefaults.standardUserDefaults().setInteger(4, forKey: "CurrentLevel")
+            currentLevel = 4
+        }
+        
+        player.runAction(SKAction.playSoundFileNamed("woohoo.mp3", waitForCompletion: false))
+        
+        //self.scene?.paused = true
+        let completeLabel = SKLabelNode(fontNamed: "Road Rage")
+        completeLabel.text = "Level Complete"
+        completeLabel.fontSize = 100
+        completeLabel.fontColor = UIColor.redColor()
+        completeLabel.zPosition = 10
+        completeLabel.position = CGPoint(x: 0, y: 10)
+        self.addChild(completeLabel)
+        
+        let seconds = 1.5
+        let delay = seconds * Double(NSEC_PER_SEC)
+        let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+        dispatch_after(dispatchTime, dispatch_get_main_queue()) {
+            
+            let level = State(fileNamed: "State")
+            level!.scaleMode = .AspectFit
+            self.view?.presentScene(level!, transition:SKTransition.fadeWithColor(UIColor.greenColor(), duration: NSTimeInterval(1.5)))
+            
+            
+        }
+        
+        
+        
+    }
+    
+    
+    
+    
     func createPausePanel() {
         spawner.invalidate()
         spawner2.invalidate()
@@ -406,7 +467,9 @@ class High: SKScene, SKPhysicsContactDelegate {
     func playerDied() {
         
         lives -= 1
+        if lives >= 0 {
         livesLabel.text = "\(lives)"
+        }
         let dead = SKSpriteNode(imageNamed: "Dead")
         dead.position = player.position
         dead.zPosition = 5
@@ -415,7 +478,7 @@ class High: SKScene, SKPhysicsContactDelegate {
         dead.physicsBody!.mass = 0.5
         dead.physicsBody?.dynamic = true
         dead.physicsBody?.allowsRotation = true
-        dead.runAction(SKAction.playSoundFileNamed("Death.mp3", waitForCompletion: false))
+        //dead.runAction(SKAction.playSoundFileNamed("Death.mp3", waitForCompletion: false))
         dead.alpha = 0.5
         player.removeFromParent()
         
@@ -423,9 +486,7 @@ class High: SKScene, SKPhysicsContactDelegate {
         dead.physicsBody?.applyAngularImpulse(-0.1)
         
         
-        if highScore < score {
-            NSUserDefaults.standardUserDefaults().setInteger(score, forKey: "Highscore")
-        }
+        
         
         let seconds = 1.0
         let delay = seconds * Double(NSEC_PER_SEC)
@@ -433,10 +494,11 @@ class High: SKScene, SKPhysicsContactDelegate {
         dispatch_after(dispatchTime, dispatch_get_main_queue()) {
             
             for child in self.children {
-                if child.name == "Pothole" || child.name == "Bomb" || child.name == "Barrel" || child.name == "Water" {
+                if child.name == "Pothole" || child.name == "Bomb" || child.name == "Barrel" || child.name == "plus5" {
                     child.removeFromParent()
                 }
             }
+            
             
             dead.physicsBody?.dynamic = false
             dead.removeFromParent()
@@ -448,7 +510,21 @@ class High: SKScene, SKPhysicsContactDelegate {
             
             self.isAlive = false
             
-            if self.lives <= 0 {
+            
+            if self.lives < 0 {
+                
+                if interstitial.isReady {
+                    let currentViewController:UIViewController=UIApplication.sharedApplication().keyWindow!.rootViewController!
+                    
+                    interstitial.presentFromRootViewController(currentViewController)
+                } else {
+                    print("Ad wasn't ready")
+                }
+                
+                interstitial = GADInterstitial(adUnitID: "ca-app-pub-6381417154543225/8624542790")
+                let request = GADRequest()
+                interstitial.loadRequest(request)
+                
                 
                 let restart = SKSpriteNode(imageNamed: "Restart")
                 let quit = SKSpriteNode(imageNamed: "Quit")
@@ -507,14 +583,16 @@ class High: SKScene, SKPhysicsContactDelegate {
     
     func playerDiedOffScreen() {
         lives -= 1
+        if lives >= 0 {
         livesLabel.text = "\(lives)"
+        }
         
         for child in self.children {
-            if child.name == "Pothole" || child.name == "Bomb" || child.name == "Barrel" || child.name == "Water" {
+            if child.name == "Pothole" || child.name == "Bomb" || child.name == "Barrel" || child.name == "plus5" {
                 child.removeFromParent()
             }
         }
-
+        
         
         self.runAction(SKAction.playSoundFileNamed("Death.mp3", waitForCompletion: false))
         
@@ -525,7 +603,22 @@ class High: SKScene, SKPhysicsContactDelegate {
         
         self.isAlive = false
         
-        if self.lives <= 0 {
+        
+        
+        if self.lives < 0 {
+            
+            if interstitial.isReady {
+                let currentViewController:UIViewController=UIApplication.sharedApplication().keyWindow!.rootViewController!
+                
+                interstitial.presentFromRootViewController(currentViewController)
+            } else {
+                print("Ad wasn't ready")
+            }
+            
+            interstitial = GADInterstitial(adUnitID: "ca-app-pub-6381417154543225/8624542790")
+            let request = GADRequest()
+            interstitial.loadRequest(request)
+            
             
             let restart = SKSpriteNode(imageNamed: "Restart")
             let quit = SKSpriteNode(imageNamed: "Quit")

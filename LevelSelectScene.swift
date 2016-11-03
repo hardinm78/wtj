@@ -25,6 +25,8 @@ class LevelSelectScene: SKScene {
     var oldCanton = SKSpriteNode()
     var lakeland = SKSpriteNode()
     
+    //var s1 = SKSpriteNode()
+    
     
     
     
@@ -155,6 +157,34 @@ class LevelSelectScene: SKScene {
     }
     
     func createBtns() {
+        
+        let s1 = childNodeWithName("s1") as! SKSpriteNode
+        let s2 = childNodeWithName("s2") as! SKSpriteNode
+        let s3 = childNodeWithName("s3") as! SKSpriteNode
+        let s4 = childNodeWithName("s4") as! SKSpriteNode
+        let s5 = childNodeWithName("s5") as! SKSpriteNode
+        let s6 = childNodeWithName("s6") as! SKSpriteNode
+        let s7 = childNodeWithName("s7") as! SKSpriteNode
+        let s8 = childNodeWithName("s8") as! SKSpriteNode
+        let s9 = childNodeWithName("s9") as! SKSpriteNode
+        let s10 = childNodeWithName("s10") as! SKSpriteNode
+        let s11 = childNodeWithName("s11") as! SKSpriteNode
+        let s12 = childNodeWithName("s12") as! SKSpriteNode
+        
+        s1.zPosition = -1
+        s2.zPosition = -1
+        s3.zPosition = -1
+        s4.zPosition = -1
+        s5.zPosition = -1
+        s6.zPosition = -1
+        s7.zPosition = -1
+        s8.zPosition = -1
+        s9.zPosition = -1
+        s10.zPosition = -1
+        s11.zPosition = -1
+        s12.zPosition = -1
+       
+        
         countyLine = childNodeWithName("CountyLine") as! SKSpriteNode
         
         
@@ -162,68 +192,82 @@ class LevelSelectScene: SKScene {
         capitol.alpha = 0.5
         if levelsCompleted >= 1 {
             capitol.alpha = 1
+            s1.zPosition = 5
         }
         
         ridgewood = childNodeWithName("Ridgewood") as! SKSpriteNode
         ridgewood.alpha = 0.5
         if levelsCompleted >= 2 {
             ridgewood.alpha = 1
+            s2.zPosition = 5
         }
         
         high = childNodeWithName("High") as! SKSpriteNode
         high.alpha = 0.5
         if levelsCompleted >= 3 {
             high.alpha = 1
+            s3.zPosition = 5
         }
         
         state = childNodeWithName("State") as! SKSpriteNode
         state.alpha = 0.5
         if levelsCompleted >= 4 {
             state.alpha = 1
+            s4.zPosition = 5
         }
         
         terry = childNodeWithName("Terry") as! SKSpriteNode
         terry.alpha = 0.5
         if levelsCompleted >= 5 {
             terry.alpha = 1
+            s5.zPosition = 5
         }
         
         fortification = childNodeWithName("Fortification") as! SKSpriteNode
         fortification.alpha = 0.5
         if levelsCompleted >= 6 {
             fortification.alpha = 1
+            s6.zPosition = 5
         }
         
         mcDowell = childNodeWithName("McDowell") as! SKSpriteNode
         mcDowell.alpha = 0.5
         if levelsCompleted >= 7 {
             mcDowell.alpha = 1
+            s7.zPosition = 5
         }
         
         ellis = childNodeWithName("Ellis") as! SKSpriteNode
         ellis.alpha = 0.5
         if levelsCompleted >= 8 {
             ellis.alpha = 1
+            s8.zPosition = 5
         }
         
         woodrowWilson = childNodeWithName("WoodrowWilson") as! SKSpriteNode
         woodrowWilson.alpha = 0.5
         if levelsCompleted >= 9 {
             woodrowWilson.alpha = 1
+            s9.zPosition = 5
         }
         
         oldCanton = childNodeWithName("OldCanton") as! SKSpriteNode
         oldCanton.alpha = 0.5
         if levelsCompleted >= 10 {
             oldCanton.alpha = 1
+            s10.zPosition = 5
         }
         lakeland = childNodeWithName("Lakeland") as! SKSpriteNode
         lakeland.alpha = 0.5
         if levelsCompleted >= 11 {
             lakeland.alpha = 1
+            s11.zPosition = 5
         }
         
-        
+        if levelsCompleted >= 12 {
+            lakeland.alpha = 1
+            s12.zPosition = 5
+        }
        highlight.position = CGPoint(x: countyLine.position.x + 2 , y: countyLine.position.y - 2)
         
     }

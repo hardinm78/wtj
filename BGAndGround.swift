@@ -27,6 +27,20 @@ class BGAndGround {
             bgImage = "High"
         case 4:
             bgImage = "State"
+        case 5:
+            bgImage = "cityhighway"
+        case 6:
+            bgImage = "frt"
+        case 7:
+            bgImage = "mcd"
+        case 8:
+            bgImage = "ell"
+        case 9:
+            bgImage = "ww"
+        case 10:
+            bgImage = "oc"
+        case 11:
+            bgImage = "ll"
             
         default:
             break

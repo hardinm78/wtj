@@ -21,8 +21,25 @@ class AudioManager {
     
     func playBGMusic() {
         
-        let url = NSBundle.mainBundle().URLForResource("HappyVintageBeat", withExtension: "wav")
+       var url = NSBundle.mainBundle().URLForResource("HappyVintageBeat", withExtension: "mp3")
+        switch bgSong {
+            
+        case 0:
+            url = NSBundle.mainBundle().URLForResource("HappyVintageBeat", withExtension: "mp3")
+        case 1:
+            url = NSBundle.mainBundle().URLForResource("paintthesky", withExtension: "mp3")
+        case 2:
+            url = NSBundle.mainBundle().URLForResource("citylife", withExtension: "mp3")
+        case 3:
+            url = NSBundle.mainBundle().URLForResource("shame", withExtension: "mp3")
+    
+        default:
+           url = NSBundle.mainBundle().URLForResource("HappyVintageBeat", withExtension: "wav")
+            
+        }
         
+        
+
         var err: NSError?
         
         do {
@@ -45,6 +62,11 @@ class AudioManager {
         audioPlayer?.stop()
         }
     }
+    
+    func pauseBGMusic() {
+        audioPlayer?.pause()
+    }
+    
     
     func isAudioPlayerInitialized() -> Bool {
         return audioPlayer == nil

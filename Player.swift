@@ -46,6 +46,9 @@ class Player:SKSpriteNode {
         self.physicsBody!.velocity = CGVector(dx: 0, dy:0)
         self.physicsBody?.applyImpulse(CGVector(dx: 15, dy: 1200))
         
+
+        
+        
         var jumping = [SKTexture]()
         
         for i in 0...39 {
@@ -56,6 +59,10 @@ class Player:SKSpriteNode {
         let jumpAnimation = SKAction.animateWithTextures(jumping, timePerFrame: NSTimeInterval(0.04), resize: true, restore: true)
         self.runAction(jumpAnimation)
 
+        self.physicsBody?.categoryBitMask = ColliderType.Player
+        self.physicsBody?.collisionBitMask = ColliderType.Ground | ColliderType.Obstacle
+        self.physicsBody?.contactTestBitMask = ColliderType.Ground | ColliderType.Obstacle | ColliderType.Collectible
+        
         print("jumped")
     }
     func duck() {
@@ -81,6 +88,9 @@ class Player:SKSpriteNode {
         self.runAction(duckAnimation)
         
         self.physicsBody = SKPhysicsBody(rectangleOfSize: CGSize(width: 250, height: 50),center: CGPoint(x: 0, y: -120))
+        self.physicsBody?.categoryBitMask = ColliderType.Player
+        self.physicsBody?.collisionBitMask = ColliderType.Ground | ColliderType.Obstacle
+        self.physicsBody?.contactTestBitMask = ColliderType.Ground | ColliderType.Obstacle | ColliderType.Collectible
         self.physicsBody!.mass = 0.5
         
         let seconds = 0.5
